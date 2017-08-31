@@ -6,7 +6,7 @@ int numlados = 1;
 void desenhaCena(void)
 {
 
-
+	//OPA
     int valor = 360 / numlados;
 	int r = 35;
 	int x = 50;
