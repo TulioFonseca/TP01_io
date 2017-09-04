@@ -54,7 +54,7 @@ void desenhaCena(void)
 
 
     // Desenha Cobra
-    glColor3f(0, 0, 1d);
+    glColor3f(0, 0, 1);
     desenhaQuadrado(cobra);
 
     // Desenha os obstaculos
