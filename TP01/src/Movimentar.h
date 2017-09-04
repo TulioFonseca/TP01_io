@@ -8,7 +8,10 @@
 #ifndef MOVIMENTAR_H_
 #define MOVIMENTAR_H_
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 2ad77eb... Correcao Bugs
 =======
 >>>>>>> parent of 2ad77eb... Correcao Bugs
 #include "Movimentar.h"
