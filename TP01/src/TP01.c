@@ -4,6 +4,7 @@
 #include <GL/freeglut.h>
 #include <math.h>
 #include <stdbool.h>
+#include "Movimentar.h"
 int numlados = 1;
 int pontoX = 50, pontoY = 50;
 int direcao;
@@ -57,28 +58,12 @@ void redimensiona(int w, int h)
    glLoadIdentity();
 }
 
+
+
 void atualiza() {
-	if (!PAUSE){
-		if (direcao == CIMA){
-				pontoY += PASSO;
-			}else if (direcao == BAIXO){
-				pontoY -= PASSO;
 
-			}else if (direcao == DIREITA){
-				pontoX += PASSO;
-
-			}else if(direcao == ESQUERDA){
-				pontoX -= PASSO;
-			}
-			if (colisaoParede(pontoX,pontoY) == 1){
-				printf("Colidiu no ponto x : %d e ponto y: %d \n", pontoX, pontoY);
-				Sleep(500);
-				exit(0);
-			}
-
-	}
-
-	glutTimerFunc(33, atualiza, 0);
+	movimentarObjeto(direcao, PAUSE);
+    glutTimerFunc(33, atualiza, 0);
 	glutPostRedisplay();
 }
 
