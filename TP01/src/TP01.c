@@ -5,14 +5,33 @@
 #include <math.h>
 #include <stdbool.h>
 #include "Movimentar.h"
+#include "Quadrado.h"
+#include "colisao.h"
 int numlados = 1;
 int pontoX = 50, pontoY = 50;
-int direcao;
-const int CIMA = 1, BAIXO = 2, DIREITA = 3, ESQUERDA = 4;
-const float PASSO = 1;
-int fps = 33;
+int direcao = 0;
+
+
+//int fps = 33;
 bool PAUSE = false;
 bool sistema;
+
+const int tamanhoTela = 700;
+QUADRADO obstaculos[10];
+QUADRADO cobra;
+int qtdObstaculos;
+const int numeroMaxObstaculos = 10;
+
+void desenhaQuadrado(QUADRADO quadrado){
+
+    glBegin(GL_POLYGON);
+        glVertex3f(quadrado.x, quadrado.y, 0);
+        glVertex3f(quadrado.x, quadrado.y + quadrado.altura, 0);
+        glVertex3f(quadrado.x + quadrado.largura, quadrado.y + quadrado.altura, 0);
+        glVertex3f(quadrado.x + quadrado.largura, quadrado.y, 0);
+
+    glEnd();
+}
 
 void desenhaCena(void)
 {	glMatrixMode(GL_MODELVIEW);
@@ -30,14 +49,8 @@ void desenhaCena(void)
 		glVertex3f(100,0,0);
 	glEnd();
 	glColor3f(1, 0, 0); //
-	glPointSize(10);
-	glBegin(GL_POINTS); // Desenhando o contorno do labirinto;
-		glVertex3f(pontoX,pontoY,0);
-	glEnd();
+
 	//glFlush();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 
     // Desenha Cobra
@@ -50,22 +63,37 @@ void desenhaCena(void)
     	desenhaQuadrado(obstaculos[i]);
     }
 
-=======
->>>>>>> parent of 2ad77eb... Correcao Bugs
-=======
->>>>>>> parent of 2ad77eb... Correcao Bugs
-=======
->>>>>>> parent of 2ad77eb... Correcao Bugs
 	glutSwapBuffers();
 
 }
 
+void criaObstaculos(){
+	srand(time(NULL));
+	for(int i = 0; i < numeroMaxObstaculos;){
 
-// Inicia algumas variÃ¡veis de estado
+		float x=(rand()%90 + 10);
+		float y=(rand()%90 + 10);
+		QUADRADO quadrado = {x,y,3,3};
+
+		//if(colideObstaculos(&quadrado, &obstaculos, qtdObstaculos) || verificaColisao(&quadrado, &cobra)) continue;
+		obstaculos[qtdObstaculos] = quadrado;
+		qtdObstaculos += 1;
+		i++;
+	}
+}
+
+// Inicia algumas variáveis de estado
 void inicializa(void)
 {
     // cor para limpar a tela
-    glClearColor(1, 1, 1, 0);      // branco
+    glClearColor(0, 0, 0, 0);      // branco
+
+    criaObstaculos();
+        //Cobra inicia no meio da tela
+        cobra.x = 1;
+        cobra.y = 1;
+        cobra.largura = 3;
+        cobra.altura = 3;
 }
 
 // Callback de redimensionamento
@@ -82,18 +110,15 @@ void redimensiona(int w, int h)
 
 
 void atualiza() {
+	//if(direcao != 0){
 
-	movimentarObjeto(direcao, PAUSE);
-    glutTimerFunc(33, atualiza, 0);
-	glutPostRedisplay();
+		movimentarObjeto(direcao, PAUSE, &cobra, &obstaculos, qtdObstaculos);
+		glutTimerFunc(33, atualiza, 0);
+		glutPostRedisplay();
+	//}
+
 }
 
-int colisaoParede(int pontoX, int pontoY){
-	if (pontoY >= 100 || pontoX >= 100 || pontoX <= 0 || pontoY <= 0 ){
-		return 1;
-	}
-	return 0;
-}
 // Callback de evento de teclado
 void teclado(unsigned char key, int x, int y)
 {
@@ -137,12 +162,11 @@ int main(int argc, char **argv) {
 	    glutDisplayFunc(desenhaCena);
 	    glutReshapeFunc(redimensiona);
 	    glutKeyboardFunc(teclado);
-	    glutTimerFunc(33, atualiza, 0);
+	    glutTimerFunc(0, atualiza, 0);
 	    inicializa();
 	    glutMainLoop();
 	    return 0;
 }
-
 
 
 

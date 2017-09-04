@@ -12,11 +12,11 @@
 #include "Quadrado.h"
 #include <stdbool.h>
 
-bool verificaColisao(QUADRADO quadrado1, QUADRADO quadrado2);
+bool verificaColisao(QUADRADO* quadrado1, QUADRADO* quadrado2);
 
-bool colideObstaculos(QUADRADO quadrado, QUADRADO obstaculos[], qtdObstaculos);
+bool colideObstaculos(QUADRADO* quadrado, QUADRADO obstaculos[], int qtdObstaculos);
 
-bool colisaoParede(int pontoX, int pontoY);
+bool colisaoParede(float pontoX, float pontoY);
 
 
 #endif /* COLISAO_H_ */
