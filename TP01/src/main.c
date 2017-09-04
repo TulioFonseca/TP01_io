@@ -104,7 +104,7 @@ void atualiza() {
 		cobra.x += PASSO;
 
 	}else if(direcao == ESQUERDA){
-		cobra..x -= PASSO;
+		cobra.x -= PASSO;
 
 	}
 	if (colisaoParede(pontoX,pontoY) == 1){
@@ -112,7 +112,7 @@ void atualiza() {
 		Sleep(500);
 		exit(0);
 	}
-	fps += 33;
+
 	glutTimerFunc(fps, atualiza, 0);
 	glutPostRedisplay();
 }
