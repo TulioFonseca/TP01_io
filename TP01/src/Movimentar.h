@@ -7,7 +7,10 @@
 
 #ifndef MOVIMENTAR_H_
 #define MOVIMENTAR_H_
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 2ad77eb... Correcao Bugs
 #include "Movimentar.h"
 #include <stdbool.h>
 

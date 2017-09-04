@@ -4,36 +4,26 @@
  *  Created on: 4 de set de 2017
  *      Author: tu-12
  */
-
-#include "Movimentar.h"
-
-
-void movimentarObjeto(int direcao, bool PAUSE, QUADRADO *player, QUADRADO *obstaculos, int qtdObstaculos){
-
+#include <stdbool.h>
+void movimentarObjeto(int direcao, bool PAUSE){
 	if (!PAUSE){
-		if (direcao == CIMA){
-			player->y += PASSO;
-			if(colideObstaculos(player, obstaculos, qtdObstaculos)) morre();
+			if (direcao == CIMA){
+					pontoY += PASSO;
+				}else if (direcao == BAIXO){
+					pontoY -= PASSO;
 
-		}else if (direcao == BAIXO){
-			player->y -= PASSO;
-			if(colideObstaculos(player, obstaculos,qtdObstaculos)) morre();
+				}else if (direcao == DIREITA){
+					pontoX += PASSO;
 
-		}else if (direcao == DIREITA){
-			player->x += PASSO;
-			if(colideObstaculos(player, obstaculos, qtdObstaculos)) morre();
+				}else if(direcao == ESQUERDA){
+					pontoX -= PASSO;
+				}
+				if (colisaoParede(pontoX,pontoY) == 1){
+					printf("Colidiu no ponto x : %d e ponto y: %d \n", pontoX, pontoY);
+					Sleep(500);
+					exit(0);
+				}
 
-		}else if(direcao == ESQUERDA){
-			player->x -= PASSO;
-			if(colideObstaculos(player, obstaculos, qtdObstaculos)) morre();
 		}
-		if (colisaoParede(player->x,player->y)){
-			morre();
-		}
-	}
-}
-
-void morre(){
-	exit(0);
 }
 
