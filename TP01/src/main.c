@@ -14,7 +14,7 @@
 #include <time.h>
 
 const int tamanhoTela = 700;
-QUADRADO obstaculo[10];
+QUADRADO obstaculos[10];
 QUADRADO cobra;
 int qtdObstaculos;
 const int numeroMaxObstaculos = 10;
@@ -22,6 +22,10 @@ const int numeroMaxObstaculos = 10;
 const float PASSO = 1;
 int direcao;
 const int CIMA = 1, BAIXO = 2, DIREITA = 3, ESQUERDA = 4;
+
+bool PAUSE = false;
+bool sistema;
+
 
 void desenhaQuadrado(QUADRADO quadrado){
 
@@ -51,7 +55,7 @@ void desenhaCena(void)
     // Desenha os obstaculos
     glColor3f(0, 0, 0);
     for(int i = 0; i < qtdObstaculos; i++){
-    	desenhaQuadrado(obstaculo[i]);
+    	desenhaQuadrado(obstaculos[i]);
     }
 
     // Diz ao OpenGL para colocar o que desenhamos na tela
@@ -66,18 +70,20 @@ void criaObstaculos(){
 		float x=(rand()%90 + 10);
 		float y=(rand()%90 + 10);
 		QUADRADO quadrado = {x,y,3,3};
+
+
+
 		for(int i = 0; i < qtdObstaculos; i++){
-			if(verificaColisao(quadrado, obstaculo[i]))
+			if(verificaColisao(quadrado, obstaculos[i]))
 		    	colide = true;
 	   }
-		if(colide || verificaColisao(quadrado, cobra)) continue;
-		obstaculo[qtdObstaculos] = quadrado;
+
+		if(colideObstaculos(quadrado, obstaculos, qtdObstaculos) || verificaColisao(quadrado, cobra)) continue;
+		obstaculos[qtdObstaculos] = quadrado;
 		qtdObstaculos += 1;
 		i++;
 	}
 }
-
-
 
 void inicializa(void)
 {
@@ -93,52 +99,61 @@ void inicializa(void)
 
 }
 
+void morre(){
+	exit(0);
+}
+
 void atualiza() {
-	if (direcao == CIMA){
-		cobra.y += PASSO;
+	if (!PAUSE){
+		if (direcao == CIMA){
+				cobra.y += PASSO;
+				if(colideObstaculos(cobra, obstaculos, qtdObstaculos)) morre();
 
-	}else if (direcao == BAIXO){
-		cobra.y -= PASSO;
+			}else if (direcao == BAIXO){
+				cobra.y -= PASSO;
+				if(colideObstaculos(cobra, obstaculos,qtdObstaculos)) morre();
 
-	}else if (direcao == DIREITA){
-		cobra.x += PASSO;
+			}else if (direcao == DIREITA){
+				cobra.x += PASSO;
+				if(colideObstaculos(cobra, obstaculos, qtdObstaculos)) morre();
 
-	}else if(direcao == ESQUERDA){
-		cobra..x -= PASSO;
-
+			}else if(direcao == ESQUERDA){
+				cobra.x -= PASSO;
+				if(colideObstaculos(cobra, obstaculos, qtdObstaculos)) morre();
+			}
+			if (colisaoParede(cobra.x,cobra.y)){
+				exit(0);
+			}
 	}
-	if (colisaoParede(pontoX,pontoY) == 1){
-		printf("Colidiu no ponto x : %d e ponto y: %d \n", pontoX, pontoY);
-		Sleep(500);
-		exit(0);
-	}
-	fps += 33;
-	glutTimerFunc(fps, atualiza, 0);
+
+	glutTimerFunc(33, atualiza, 0);
 	glutPostRedisplay();
 }
 
+// Callback de evento de teclado
 void teclado(unsigned char key, int x, int y)
 {
-   switch(key)
-   {
-      // Tecla ESC
-      case 27:
-         exit(0);
-         break;
-      case 119: // 'w'
-      	direcao = CIMA;
-      	break;
-      case 115: // 's'
-      	direcao = BAIXO;
-      	break;
-      case 100:// 'd'
-      	direcao = DIREITA;
-      	break;
-      case 97: // 'a'
-      	direcao = ESQUERDA;
-      	break;
-      default:
-         break;
+   switch(key){
+		  case 27:
+			 exit(0);
+			 break;
+		  case 119: // 'w'
+			  direcao = CIMA;
+			  break;
+		  case 115: // 's'
+			  direcao = BAIXO;
+			  break;
+		  case 100:// 'd'
+			  direcao = DIREITA;
+			  break;
+		  case 97: // 'a'
+			  direcao = ESQUERDA;
+			  break;
+		  case 'p':
+			  PAUSE = !PAUSE;
+			  break;
+		  default:
+			 break;
    }
 }
 

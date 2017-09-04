@@ -34,3 +34,19 @@ bool verificaColisao(QUADRADO *quadrado1, QUADRADO *quadrado2) {
 	}			  //do contrário (COLISÃO)/
 	return true;
 }
+
+bool colideObstaculos(QUADRADO quadrado, QUADRADO obstaculos[], qtdObstaculos){
+	for(int i = 0; i < qtdObstaculos; i++){
+			if(verificaColisao(quadrado, obstaculos[i]))
+				return true;
+		}
+		return false;
+
+}
+
+bool colisaoParede(int pontoX, int pontoY){
+	if (pontoY >= 100 || pontoX >= 100 || pontoX <= 0 || pontoY <= 0 ){
+			return true;
+		}
+		return false;
+}
