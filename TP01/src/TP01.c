@@ -37,6 +37,7 @@ void desenhaCena(void)
 	//glFlush();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
     // Desenha Cobra
@@ -49,6 +50,8 @@ void desenhaCena(void)
     	desenhaQuadrado(obstaculos[i]);
     }
 
+=======
+>>>>>>> parent of 2ad77eb... Correcao Bugs
 =======
 >>>>>>> parent of 2ad77eb... Correcao Bugs
 =======
