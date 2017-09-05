@@ -19,7 +19,8 @@ bool sistema;
 
 const int tamanhoTela = 700;
 QUADRADO obstaculos[10];
-QUADRADO cobra;
+QUADRADO player;
+QUADRADO item;
 
 
 
@@ -56,13 +57,17 @@ void desenhaCena(void)
 
     // Desenha Cobra
     glColor3f(0, 0, 1);
-    desenhaQuadrado(cobra);
+    desenhaQuadrado(player);
 
     // Desenha os obstaculos
     glColor3f(1, 1,1);
     for(int i = 0; i < NUMERO_MAX_OBSTACULOS; i++){
     	desenhaQuadrado(obstaculos[i]);
     }
+
+    //Desenha Item
+    glColor3f(0, 1, 0);
+    desenhaQuadrado(item);
 
 	glutSwapBuffers();
 
@@ -74,12 +79,14 @@ void inicializa(void)
     // cor para limpar a tela
     glClearColor(0, 0, 0, 0);      // branco
 
-    criaObstaculos(&cobra, obstaculos, NUMERO_MAX_OBSTACULOS);
+    item = geraItem(&player, obstaculos, NUMERO_MAX_OBSTACULOS);
+
+    criaObstaculos(&player, obstaculos, NUMERO_MAX_OBSTACULOS);
 	//Cobra inicia no meio da tela
-	cobra.x = 1;
-	cobra.y = 1;
-	cobra.largura = 3;
-	cobra.altura = 3;
+	player.x = 1;
+	player.y = 1;
+	player.largura = 3;
+	player.altura = 3;
 }
 
 // Callback de redimensionamento
@@ -97,7 +104,7 @@ void redimensiona(int w, int h)
 
 void atualiza() {
 
-	movimentarObjeto(direcao, PAUSE, &cobra, &obstaculos, NUMERO_MAX_OBSTACULOS);
+	movimentarObjeto(direcao, PAUSE, &player, &obstaculos, NUMERO_MAX_OBSTACULOS);
 	glutTimerFunc(33, atualiza, 0);
 	glutPostRedisplay();
 

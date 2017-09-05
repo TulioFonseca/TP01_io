@@ -8,30 +8,32 @@
 #include "Movimentar.h"
 
 
-void movimentarObjeto(int direcao, bool PAUSE, QUADRADO *player, QUADRADO *obstaculos, int qtdObstaculos){
+void movimentarObjeto(int direcao, bool PAUSE, QUADRADO *player, QUADRADO *obstaculos, int numeroMaxObstaculos){
 
 	if (!PAUSE){
 		if (direcao == CIMA){
 			player->y += PASSO;
-			if(colideObstaculos(player, obstaculos, qtdObstaculos)) morre();
+			if(colideObstaculos(player, obstaculos, numeroMaxObstaculos)) morre();
 
 		}else if (direcao == BAIXO){
 			player->y -= PASSO;
-			if(colideObstaculos(player, obstaculos,qtdObstaculos)) morre();
+			if(colideObstaculos(player, obstaculos, numeroMaxObstaculos)) morre();
 
 		}else if (direcao == DIREITA){
 			player->x += PASSO;
-			if(colideObstaculos(player, obstaculos, qtdObstaculos)) morre();
+			if(colideObstaculos(player, obstaculos, numeroMaxObstaculos)) morre();
 
 		}else if(direcao == ESQUERDA){
 			player->x -= PASSO;
-			if(colideObstaculos(player, obstaculos, qtdObstaculos)) morre();
+			if(colideObstaculos(player, obstaculos, numeroMaxObstaculos)) morre();
 		}
 		if (colisaoParede(player->x,player->y)){
 			morre();
 		}
 	}
 }
+
+
 
 void morre(){
 	exit(0);

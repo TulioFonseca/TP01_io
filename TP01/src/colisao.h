@@ -14,7 +14,7 @@
 
 bool verificaColisao(QUADRADO* quadrado1, QUADRADO* quadrado2);
 
-bool colideObstaculos(QUADRADO* quadrado, QUADRADO obstaculos[], int qtdObstaculos);
+bool colideObstaculos(QUADRADO* quadrado, QUADRADO obstaculos[], int numeroMaxObstaculos);
 
 bool colisaoParede(float pontoX, float pontoY);
 

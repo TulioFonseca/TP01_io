@@ -24,6 +24,6 @@
 #define UP 101
 #define DOWN 103
 
-void movimentarObjeto(int direcao, bool PAUSE, QUADRADO* player, QUADRADO *obstaculos, int qtdObstaculos);
+void movimentarObjeto(int direcao, bool PAUSE, QUADRADO* player, QUADRADO *obstaculos, int numeroMaxObstaculos);
 void morre();
 #endif /* MOVIMENTAR_H_ */
