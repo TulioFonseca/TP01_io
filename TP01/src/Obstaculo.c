@@ -6,3 +6,24 @@
  */
 
 
+#include "Obstaculo.h"
+#include "Quadrado.h"
+#include "colisao.h"
+#include "stddef.h"
+
+void criaObstaculos(QUADRADO* player, QUADRADO obstaculos[], int numeroMaxObstaculos){
+	int i = 0;
+	srand(time(NULL));
+	while(i < numeroMaxObstaculos){
+
+		float x=(rand()%80 + 10);
+		float y=(rand()%80 + 10d);
+		QUADRADO quadrado = {x,y,3,3};
+
+		if(colideObstaculos(&quadrado, obstaculos, numeroMaxObstaculos) || verificaColisao(&quadrado, player)) continue;
+		obstaculos[i] = quadrado;
+		i++;
+	}
+}
+
+

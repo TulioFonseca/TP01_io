@@ -7,6 +7,8 @@
 #include "Movimentar.h"
 #include "Quadrado.h"
 #include "colisao.h"
+#define NUMERO_MAX_OBSTACULOS 10
+
 int numlados = 1;
 int pontoX = 50, pontoY = 50;
 int direcao = 0;
@@ -18,8 +20,8 @@ bool sistema;
 const int tamanhoTela = 700;
 QUADRADO obstaculos[10];
 QUADRADO cobra;
-int qtdObstaculos;
-const int numeroMaxObstaculos = 10;
+
+
 
 void desenhaQuadrado(QUADRADO quadrado){
 
@@ -38,7 +40,7 @@ void desenhaCena(void)
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1, 0, 0);
-	glLineWidth(50.0f);
+	glLineWidth(5.0f);
 	glBegin(GL_LINE_LOOP); // Desenhando o contorno do labirinto;
 		glVertex3f(0,0,0);
 		glVertex3f(0,100,0);
@@ -58,27 +60,12 @@ void desenhaCena(void)
 
     // Desenha os obstaculos
     glColor3f(1, 1,1);
-    for(int i = 0; i < qtdObstaculos; i++){
+    for(int i = 0; i < NUMERO_MAX_OBSTACULOS; i++){
     	desenhaQuadrado(obstaculos[i]);
     }
 
 	glutSwapBuffers();
 
-}
-
-void criaObstaculos(){
-	srand(time(NULL));
-	for(int i = 0; i < numeroMaxObstaculos;){
-
-		float x=(rand()%90 + 10);
-		float y=(rand()%90 + 10);
-		QUADRADO quadrado = {x,y,3,3};
-
-		//if(colideObstaculos(&quadrado, &obstaculos, qtdObstaculos) || verificaColisao(&quadrado, &cobra)) continue;
-		obstaculos[qtdObstaculos] = quadrado;
-		qtdObstaculos += 1;
-		i++;
-	}
 }
 
 // Inicia algumas variáveis de estado
@@ -87,12 +74,12 @@ void inicializa(void)
     // cor para limpar a tela
     glClearColor(0, 0, 0, 0);      // branco
 
-    criaObstaculos();
-        //Cobra inicia no meio da tela
-        cobra.x = 1;
-        cobra.y = 1;
-        cobra.largura = 3;
-        cobra.altura = 3;
+    criaObstaculos(&cobra, obstaculos, NUMERO_MAX_OBSTACULOS);
+	//Cobra inicia no meio da tela
+	cobra.x = 1;
+	cobra.y = 1;
+	cobra.largura = 3;
+	cobra.altura = 3;
 }
 
 // Callback de redimensionamento
@@ -109,12 +96,10 @@ void redimensiona(int w, int h)
 
 
 void atualiza() {
-	//if(direcao != 0){
 
-		movimentarObjeto(direcao, PAUSE, &cobra, &obstaculos, qtdObstaculos);
-		glutTimerFunc(33, atualiza, 0);
-		glutPostRedisplay();
-	//}
+	movimentarObjeto(direcao, PAUSE, &cobra, &obstaculos, NUMERO_MAX_OBSTACULOS);
+	glutTimerFunc(33, atualiza, 0);
+	glutPostRedisplay();
 
 }
 
@@ -143,7 +128,6 @@ void tecladoEspecial (int key, int x, int y){
 void teclado(unsigned char key, int x, int y)
 {
    switch(key){
-
 		  case 27:
 			 exit(0);
 			 break;
@@ -165,31 +149,28 @@ void teclado(unsigned char key, int x, int y)
 			  break;
 		  default:
 			 break;
-
    }
-
 
 }
 
 // Rotina principal
 int main(int argc, char **argv) {
 	// Acordando o GLUT
-	//
-	    glutInit(&argc, argv);
-	    glutInitContextVersion(1, 1);
-	    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
-	    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	    glutInitWindowSize(400, 400);
-	    glutInitWindowPosition(100, 100);
-	    glutCreateWindow("Quadrado");
-	    glutDisplayFunc(desenhaCena);
-	    glutReshapeFunc(redimensiona);
-	    glutKeyboardFunc(teclado);
-	    glutSpecialFunc(tecladoEspecial);
-	    glutTimerFunc(0, atualiza, 0);
-	    inicializa();
-	    glutMainLoop();
-	    return 0;
+	glutInit(&argc, argv);
+	glutInitContextVersion(1, 1);
+	glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+	glutInitWindowSize(400, 400);
+	glutInitWindowPosition(100, 100);
+	glutCreateWindow("Quadrado");
+	glutDisplayFunc(desenhaCena);
+	glutReshapeFunc(redimensiona);
+	glutKeyboardFunc(teclado);
+	glutSpecialFunc(tecladoEspecial);
+	glutTimerFunc(0, atualiza, 0);
+	inicializa();
+	glutMainLoop();
+	return 0;
 }
 
 
