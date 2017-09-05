@@ -19,6 +19,11 @@
 #define DIREITA 3
 #define ESQUERDA 4
 
+#define RIGHT 102
+#define LEFT 100
+#define UP 101
+#define DOWN 103
+
 void movimentarObjeto(int direcao, bool PAUSE, QUADRADO* player, QUADRADO *obstaculos, int qtdObstaculos);
 void morre();
 #endif /* MOVIMENTAR_H_ */

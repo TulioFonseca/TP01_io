@@ -12,7 +12,6 @@ int pontoX = 50, pontoY = 50;
 int direcao = 0;
 
 
-//int fps = 33;
 bool PAUSE = false;
 bool sistema;
 
@@ -119,10 +118,32 @@ void atualiza() {
 
 }
 
+void tecladoEspecial (int key, int x, int y){
+	switch(key){
+			  case UP: // 'w'
+				  direcao = CIMA;
+				  break;
+			  case DOWN: // 's'
+				  direcao = BAIXO;
+				  break;
+			  case RIGHT: //d
+				  direcao = DIREITA;
+				  break;
+			  case LEFT: // 'a'
+				  direcao = ESQUERDA;
+				  break;
+			  default:
+				 break;
+	}
+}
+
+
+
 // Callback de evento de teclado
 void teclado(unsigned char key, int x, int y)
 {
    switch(key){
+
 		  case 27:
 			 exit(0);
 			 break;
@@ -133,8 +154,9 @@ void teclado(unsigned char key, int x, int y)
 			  direcao = BAIXO;
 			  break;
 		  case 100:// 'd'
-			  direcao = DIREITA;
+		      direcao = DIREITA;
 			  break;
+
 		  case 97: // 'a'
 			  direcao = ESQUERDA;
 			  break;
@@ -152,6 +174,7 @@ void teclado(unsigned char key, int x, int y)
 // Rotina principal
 int main(int argc, char **argv) {
 	// Acordando o GLUT
+	//
 	    glutInit(&argc, argv);
 	    glutInitContextVersion(1, 1);
 	    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
@@ -162,6 +185,7 @@ int main(int argc, char **argv) {
 	    glutDisplayFunc(desenhaCena);
 	    glutReshapeFunc(redimensiona);
 	    glutKeyboardFunc(teclado);
+	    glutSpecialFunc(tecladoEspecial);
 	    glutTimerFunc(0, atualiza, 0);
 	    inicializa();
 	    glutMainLoop();

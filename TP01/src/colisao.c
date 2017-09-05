@@ -26,29 +26,29 @@ bool verificaColisao(QUADRADO *quadrado1, QUADRADO *quadrado2) {
 	cima2 = quadrado2->y + quadrado2->altura;
 
 
-	printf("esquerda1 %f\n", quadrado1->x);
+	/*printf("esquerda1 %f\n", quadrado1->x);
 	printf("direita1 %f\n", direita1);
 	printf("baixo1 %f\n", baixo1);
 	printf("cima1 %f\n", cima1);
 	printf("esquerda2 %f\n", esquerda2);
 	printf("direita2 %f\n", direita2);
 	printf("baixo2 %f\n", baixo2);
-	printf("cima2 %f\n", cima2);
+	printf("cima2 %f\n", cima2);*/
 
 	if (esquerda1 > direita2){
-		printf("Teste1");
+		//printf("Teste1");
 		return false; //
 	}
 	if (direita1 < esquerda2){
-		printf("Teste2");
+		//printf("Teste2");
 		return false; //
 	}
 	if (baixo1 > cima2) {
-		printf("Teste3");
+		//("Teste3");
 		return false; //
 	}
 	if (cima1 < baixo2){
-		printf("Teste4");
+		//printf("Teste4");
 		return false; //
 	}			  //do
 	return true;
