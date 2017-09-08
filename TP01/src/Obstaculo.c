@@ -11,35 +11,23 @@
 #include "colisao.h"
 #include "stddef.h"
 
-void criaObstaculos(QUADRADO* player, QUADRADO obstaculos[], int numeroMaxObstaculos){
+void criaObstaculos(QUADRADO player[], QUADRADO obstaculos[], int numeroMaxObstaculos){
 	int i = 0;
-	srand(time(NULL));
+	srand(clock());
 	while(i < numeroMaxObstaculos){
 
 		float x=(rand()%80 + 10);
 		float y=(rand()%80 + 10);
 		QUADRADO quadrado = {x,y,3,3};
 
-		if(colideObstaculos(&quadrado, obstaculos, numeroMaxObstaculos) || verificaColisao(&quadrado, player)) continue;
+		if(colideObstaculos(&quadrado, obstaculos, numeroMaxObstaculos) || verificaColisao(&quadrado, &player[0])) continue;
 		obstaculos[i] = quadrado;
 		i++;
 	}
-}
-
-QUADRADO geraItem(QUADRADO* player, QUADRADO obstaculos[], int numeroMaxObstaculos){
-	srand(time(NULL));
-	while(1){
-		float x=(rand()%80 + 10);
-		float y=(rand()%80 + 10);
-		QUADRADO item = {x,y,3,3};
-		if(colideObstaculos(&item, obstaculos, numeroMaxObstaculos) || verificaColisao(&item, player)) continue;
-		else return item;
-
-
-
-
-	}
+	//printf("%5f   %5f \n", obstaculos[0].x, obstaculos[0].y);
 
 }
+
+
 
 

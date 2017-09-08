@@ -14,8 +14,6 @@ bool verificaColisao(QUADRADO *quadrado1, QUADRADO *quadrado2) {
 	float esquerda1, direita1, cima1, baixo1;
 	float esquerda2, direita2, cima2, baixo2;
 
-
-
 	esquerda1 = quadrado1->x;
 	direita1 = quadrado1->x + quadrado1->largura;
 	baixo1 = quadrado1->y;
@@ -26,24 +24,22 @@ bool verificaColisao(QUADRADO *quadrado1, QUADRADO *quadrado2) {
 	cima2 = quadrado2->y + quadrado2->altura;
 
 
-
-
 	if (esquerda1 > direita2){
-		printf("Teste1");
+
 		return false; //
 	}
 	if (direita1 < esquerda2){
-		printf("Teste2");
+
 		return false; //
 	}
 	if (baixo1 > cima2) {
-		printf("Teste3");
+
 		return false; //
 	}
 	if (cima1 < baixo2){
-		printf("Teste4");
+
 		return false; //
-	}			  //do
+	}
 	return true;
 }
 

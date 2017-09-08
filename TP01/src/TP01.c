@@ -7,7 +7,8 @@
 #include "Movimentar.h"
 #include "Quadrado.h"
 #include "colisao.h"
-#define NUMERO_MAX_OBSTACULOS 10
+
+int NUMERO_MAX_OBSTACULOS = 10;
 
 int numlados = 1;
 int pontoX = 50, pontoY = 50;
@@ -17,10 +18,15 @@ int direcao = 0;
 bool PAUSE = false;
 bool sistema;
 
-const int tamanhoTela = 700;
+int velocidade = 33;
+const int larguraTela = 700;
+const int alturaTela = 700;
+int tamanhoPlayer;
+
+QUADRADO player[1000000]; //tamanho total para ocupar toda a tela
+QUADRADO* item;
 QUADRADO obstaculos[10];
-QUADRADO player;
-QUADRADO item;
+
 
 
 
@@ -55,9 +61,15 @@ void desenhaCena(void)
 	//glFlush();
 
 
-    // Desenha Cobra
+    // Desenha Player
     glColor3f(0, 0, 1);
-    desenhaQuadrado(player);
+
+    for(int i = 0; i <= tamanhoPlayer; i++){
+    	//printf("%5f \n", player[i].altura);
+
+    	desenhaQuadrado(player[i]);
+    }
+
 
     // Desenha os obstaculos
     glColor3f(1, 1,1);
@@ -65,9 +77,26 @@ void desenhaCena(void)
     	desenhaQuadrado(obstaculos[i]);
     }
 
+
     //Desenha Item
-    glColor3f(0, 1, 0);
-    desenhaQuadrado(item);
+    switch(item->tipoItem){
+		case 0: // normal
+			glColor3f(0, 1, 0);
+			break;
+		case 1: // ivulneravel
+			glColor3f(1, 1, 0);
+			break;
+		case 3: //
+
+			break;
+		case 4: //
+
+			break;
+		default:
+			break;
+	}
+
+    desenhaQuadrado(*item);
 
 	glutSwapBuffers();
 
@@ -77,16 +106,17 @@ void desenhaCena(void)
 void inicializa(void)
 {
     // cor para limpar a tela
-    glClearColor(0, 0, 0, 0);      // branco
+    glClearColor(0, 0, 0, 0);
 
-    item = geraItem(&player, obstaculos, NUMERO_MAX_OBSTACULOS);
+    //Cria Obstaculos
+    criaObstaculos(&player[0], obstaculos, NUMERO_MAX_OBSTACULOS);
 
-    criaObstaculos(&player, obstaculos, NUMERO_MAX_OBSTACULOS);
+    item = malloc(sizeof(QUADRADO));
+    geraItem(player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item);
+
 	//Cobra inicia no meio da tela
-	player.x = 1;
-	player.y = 1;
-	player.largura = 3;
-	player.altura = 3;
+    QUADRADO quadrado = {1,1,3,3};
+    player[0] = quadrado;
 }
 
 // Callback de redimensionamento
@@ -103,30 +133,29 @@ void redimensiona(int w, int h)
 
 
 void atualiza() {
-
-	movimentarObjeto(direcao, PAUSE, &player, &obstaculos, NUMERO_MAX_OBSTACULOS);
-	glutTimerFunc(33, atualiza, 0);
+	tamanhoPlayer = movimentarObjeto(direcao, PAUSE, player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item);
+	glutTimerFunc(velocidade, atualiza, 0);
 	glutPostRedisplay();
 
 }
 
 void tecladoEspecial (int key, int x, int y){
 	switch(key){
-			  case UP: // 'w'
-				  direcao = CIMA;
-				  break;
-			  case DOWN: // 's'
-				  direcao = BAIXO;
-				  break;
-			  case RIGHT: //d
-				  direcao = DIREITA;
-				  break;
-			  case LEFT: // 'a'
-				  direcao = ESQUERDA;
-				  break;
-			  default:
-				 break;
-	}
+		case UP: // 'w'
+		  direcao = CIMA;
+		  break;
+		case DOWN: // 's'
+		  direcao = BAIXO;
+		  break;
+		case RIGHT: //d
+		  direcao = DIREITA;
+		  break;
+		case LEFT: // 'a'
+		  direcao = ESQUERDA;
+		  break;
+		default:
+		 break;
+		}
 }
 
 
@@ -167,7 +196,7 @@ int main(int argc, char **argv) {
 	glutInitContextVersion(1, 1);
 	glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowSize(400, 400);
+	glutInitWindowSize(larguraTela, alturaTela);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Quadrado");
 	glutDisplayFunc(desenhaCena);

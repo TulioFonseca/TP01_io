@@ -7,12 +7,15 @@
 
 #ifndef QUADRADO_H_
 #define QUADRADO_H_
+#include <stdbool.h>
 
 typedef struct quadrado {
 	float x;
 	float y;
 	float largura;
 	float altura;
+	bool escudo;
+	int tipoItem;
 } QUADRADO;
 
 #endif /* QUADRADO_H_ */

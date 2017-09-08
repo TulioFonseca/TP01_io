@@ -9,9 +9,8 @@
 #define OBSTACULO_H_
 #include "Quadrado.h"
 
-void criaObstaculos(QUADRADO* player, QUADRADO obstaculos[], int numeroMaxObstaculos);
+void criaObstaculos(QUADRADO player[], QUADRADO obstaculos[], int numeroMaxObstaculos);
 
-QUADRADO geraItem(QUADRADO* player, QUADRADO obstaculos[], int numeroMaxObstaculos);
 
 #endif /* OBSTACULO_H_ */
 
