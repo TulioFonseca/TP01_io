@@ -19,8 +19,8 @@ bool PAUSE = false;
 bool sistema;
 
 int velocidade = 33;
-const int larguraTela = 700;
-const int alturaTela = 700;
+const int larguraTela = 400;
+const int alturaTela = 400;
 int tamanhoPlayer;
 
 QUADRADO player[1000000]; //tamanho total para ocupar toda a tela
@@ -142,20 +142,37 @@ void atualiza() {
 void tecladoEspecial (int key, int x, int y){
 	switch(key){
 		case UP: // 'w'
-		  direcao = CIMA;
-		  break;
+			if (direcao != BAIXO)
+				direcao = CIMA;
+		    break;
 		case DOWN: // 's'
-		  direcao = BAIXO;
-		  break;
+			if (direcao != CIMA)
+				direcao = BAIXO;
+		    break;
 		case RIGHT: //d
-		  direcao = DIREITA;
-		  break;
+			if (direcao != ESQUERDA)
+				direcao = DIREITA;
+			break;
 		case LEFT: // 'a'
-		  direcao = ESQUERDA;
-		  break;
+			if (direcao != DIREITA)
+				direcao = ESQUERDA;
+			break;
 		default:
 		 break;
 		}
+}
+void reinicia(){
+	  PAUSE = true;
+	  direcao = 0;
+	  NUMERO_MAX_OBSTACULOS = 10;
+	  numlados = 1;
+	  pontoX = 50, pontoY = 50;
+	  direcao = 0;
+	  velocidade = 33;
+	  tamanhoPlayer = 0;
+	  inicializa();
+	  PAUSE = false;
+
 }
 
 
@@ -168,20 +185,26 @@ void teclado(unsigned char key, int x, int y)
 			 exit(0);
 			 break;
 		  case 119: // 'w'
-			  direcao = CIMA;
+			  if (direcao != BAIXO)
+				  direcao = CIMA;
 			  break;
 		  case 115: // 's'
-			  direcao = BAIXO;
+			  if(direcao != CIMA)
+				  direcao = BAIXO;
 			  break;
 		  case 100:// 'd'
-		      direcao = DIREITA;
+			  if(direcao != ESQUERDA)
+				  direcao = DIREITA;
 			  break;
-
 		  case 97: // 'a'
-			  direcao = ESQUERDA;
+			  if(direcao != DIREITA)
+				  direcao = ESQUERDA;
 			  break;
 		  case 'p':
 			  PAUSE = !PAUSE;
+			  break;
+		  case 'r':
+			  reinicia();
 			  break;
 		  default:
 			 break;
