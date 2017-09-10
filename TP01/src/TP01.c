@@ -7,21 +7,26 @@
 #include "Movimentar.h"
 #include "Quadrado.h"
 #include "colisao.h"
+#include "TelasDeMenu.h"
+
+
 
 int NUMERO_MAX_OBSTACULOS = 10;
-
-int numlados = 1;
 int pontoX = 50, pontoY = 50;
 int direcao = 0;
-
-
-bool PAUSE = false;
-bool sistema;
+bool menuAtivado = true;
 
 int velocidade = 33;
 const int larguraTela = 400;
 const int alturaTela = 400;
 int tamanhoPlayer;
+
+bool reinicia = false;
+bool PAUSE = false;
+bool sistema;
+int contador = 3;
+int contadorOpcao = 3;
+int liberarMenu;
 
 QUADRADO player[1000000]; //tamanho total para ocupar toda a tela
 QUADRADO* item;
@@ -40,6 +45,7 @@ void desenhaQuadrado(QUADRADO quadrado){
 
     glEnd();
 }
+
 
 void desenhaCena(void)
 {	glMatrixMode(GL_MODELVIEW);
@@ -65,7 +71,6 @@ void desenhaCena(void)
     glColor3f(0, 0, 1);
 
     for(int i = 0; i <= tamanhoPlayer; i++){
-    	//printf("%5f \n", player[i].altura);
 
     	desenhaQuadrado(player[i]);
     }
@@ -98,26 +103,28 @@ void desenhaCena(void)
 
     desenhaQuadrado(*item);
 
+      //   DesenhaTexto(texto);
+
 	glutSwapBuffers();
 
 }
 
 // Inicia algumas variáveis de estado
+
 void inicializa(void)
 {
     // cor para limpar a tela
     glClearColor(0, 0, 0, 0);
-
     //Cria Obstaculos
     criaObstaculos(&player[0], obstaculos, NUMERO_MAX_OBSTACULOS);
-
     item = malloc(sizeof(QUADRADO));
     geraItem(player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item);
-
 	//Cobra inicia no meio da tela
     QUADRADO quadrado = {1,1,3,3};
     player[0] = quadrado;
+    //menu();
 }
+
 
 // Callback de redimensionamento
 void redimensiona(int w, int h)
@@ -139,78 +146,213 @@ void atualiza() {
 
 }
 
+
 void tecladoEspecial (int key, int x, int y){
-	switch(key){
-		case UP: // 'w'
-			if (direcao != BAIXO)
-				direcao = CIMA;
-		    break;
-		case DOWN: // 's'
-			if (direcao != CIMA)
-				direcao = BAIXO;
-		    break;
-		case RIGHT: //d
-			if (direcao != ESQUERDA)
-				direcao = DIREITA;
-			break;
-		case LEFT: // 'a'
-			if (direcao != DIREITA)
-				direcao = ESQUERDA;
-			break;
-		default:
-		 break;
-		}
+	if(!menuAtivado){
+		tecladoEspecialMovimentacao(key,x,y);
+	}else{
+		tecladoEspecialMovimentacaoMenu(key,x,y);
+	}
 }
-void reinicia(){
-	  PAUSE = true;
-	  direcao = 0;
-	  NUMERO_MAX_OBSTACULOS = 10;
-	  numlados = 1;
-	  pontoX = 50, pontoY = 50;
-	  direcao = 0;
-	  velocidade = 33;
-	  tamanhoPlayer = 0;
-	  inicializa();
-	  PAUSE = false;
-
-}
-
 
 
 // Callback de evento de teclado
 void teclado(unsigned char key, int x, int y)
 {
-   switch(key){
-		  case 27:
-			 exit(0);
-			 break;
-		  case 119: // 'w'
-			  if (direcao != BAIXO)
-				  direcao = CIMA;
-			  break;
-		  case 115: // 's'
-			  if(direcao != CIMA)
-				  direcao = BAIXO;
-			  break;
-		  case 100:// 'd'
-			  if(direcao != ESQUERDA)
-				  direcao = DIREITA;
-			  break;
-		  case 97: // 'a'
-			  if(direcao != DIREITA)
-				  direcao = ESQUERDA;
-			  break;
-		  case 'p':
-			  PAUSE = !PAUSE;
-			  break;
-		  case 'r':
-			  reinicia();
-			  break;
-		  default:
-			 break;
-   }
+	if(!menuAtivado){
+		tecladoMovimentacao(key,x,y);
+
+	}else{
+		tecladoMovimentacaoMenu(key,x, y);
+	}
 
 }
+
+
+
+void reiniciar(){
+	PAUSE = true;
+    reinicia = true;
+
+    glutDisplayFunc(menuOpcao);
+
+
+   // glutSwapBuffers();
+
+}
+void reiniciando(){
+	printf("%d \n",contadorOpcao);
+	if(contadorOpcao == 3){
+			  direcao = 0;
+			  /*NUMERO_MAX_OBSTACULOS = 10;
+			  pontoX = 50, pontoY = 50;
+			  direcao = 0;
+			  velocidade = 33;
+			  tamanhoPlayer = 0;*/
+			  inicializa();
+			  PAUSE = false;
+			  glutDisplayFunc(desenhaCena);
+
+		}else if(contadorOpcao == 2){
+			PAUSE = false;
+			glutDisplayFunc(desenhaCena);
+		}
+}
+
+
+
+
+
+void tecladoMovimentacao (unsigned char key, int x, int y){
+	switch(key){
+				case 13:
+					  if(reinicia){
+						  reinicia = false;
+						  reiniciando();
+
+					  }
+					  break;
+				  case 27:
+					 exit(0);
+					 break;
+				  case 119: // 'w'
+					  if(reinicia){
+							if(contadorOpcao < 3){
+								 menuOpcao(SOBE,contadorOpcao);
+								 contadorOpcao++;
+
+							}
+					  }else{
+						  if (direcao != BAIXO)
+							  direcao = CIMA;
+					  }
+					  break;
+				  case 115: // 's'
+					  if(reinicia){
+						  if(contadorOpcao >2){
+							  menuOpcao(DESCE,contadorOpcao);
+							  contadorOpcao--;
+						  }
+					  }else{
+						  if(direcao != CIMA)
+							  direcao = BAIXO;}
+					  break;
+				  case 100:// 'd'
+					  if(direcao != ESQUERDA)
+						  direcao = DIREITA;
+					  break;
+				  case 97: // 'a'
+					  if(direcao != DIREITA)
+						  direcao = ESQUERDA;
+					  break;
+				  case 'p':
+					  PAUSE = !PAUSE;
+					  break;
+				  case 'r':
+					  reiniciar();
+					  break;
+				  default:
+					 break;
+	}
+}
+void tecladoEspecialMovimentacao(int key, int x, int y){
+	switch(key){
+			case 13:
+				  if(reinicia){
+					  reinicia = false;
+					  reiniciando();
+
+				  }
+				  break;
+			case UP: // 'w'
+				if(reinicia){
+					if(contadorOpcao < 3){
+						 menuOpcao(SOBE,contadorOpcao);
+						 contadorOpcao++;
+
+					}
+				}else{
+					if (direcao != BAIXO)
+						direcao = CIMA;
+				}
+			    break;
+			case DOWN: // 's'
+				if(reinicia){
+					if(contadorOpcao >2){
+						menuOpcao(DESCE,contadorOpcao);
+						contadorOpcao--;
+
+					}
+				}else{
+					if (direcao != CIMA)
+						direcao = BAIXO;
+				}
+			    break;
+			case RIGHT: //d
+				if (direcao != ESQUERDA)
+					direcao = DIREITA;
+				break;
+			case LEFT: // 'a'
+				if (direcao != DIREITA)
+					direcao = ESQUERDA;
+				break;
+			default:
+			 break;
+			}
+}
+
+void tecladoEspecialMovimentacaoMenu(int key, int x, int y){
+	switch(key){
+			case UP: // 'w'
+				if(contador < 3){
+					menu(SOBE,contador);
+					contador++;
+
+				}
+			    break;
+			case DOWN: // 's'
+				if(contador > 1){
+					menu(DESCE,contador);
+					contador--;
+				}
+				break;
+			default:
+				break;
+			}
+}
+
+void tecladoMovimentacaoMenu(unsigned char key, int x, int y){
+	switch(key){
+				  case 27:
+					 exit(0);
+					 break;
+				  case 13:
+					  liberarMenu = selecionar(contador);
+					  if(liberarMenu == 1){
+						  menuAtivado = false;
+						  glutDisplayFunc(desenhaCena);
+					  }
+					  break;
+				  case 119: // 'w'
+					 if(contador < 3){
+						 menu(SOBE,contador);
+						 contador++;
+					 }
+					  break;
+				  case 115: // 's'
+	     			  if(contador > 1){
+	     				 menu(DESCE,contador);
+	     				 contador--;
+	     			  }
+					  break;
+				  default:
+					 break;
+				}
+}
+
+
+
+
 
 // Rotina principal
 int main(int argc, char **argv) {
@@ -222,12 +364,15 @@ int main(int argc, char **argv) {
 	glutInitWindowSize(larguraTela, alturaTela);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Quadrado");
-	glutDisplayFunc(desenhaCena);
+	if(menuAtivado){
+		glutDisplayFunc(menu);
+	}
 	glutReshapeFunc(redimensiona);
 	glutKeyboardFunc(teclado);
 	glutSpecialFunc(tecladoEspecial);
 	glutTimerFunc(0, atualiza, 0);
 	inicializa();
+
 	glutMainLoop();
 	return 0;
 }
