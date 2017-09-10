@@ -55,6 +55,7 @@ int selecionar(int contador){
 
 
 void DesenhaBorda(int x, int y){
+	glLineWidth(1.0f);
 	glColor3f(1.00f, 0.00f, 0.00f);
 		glBegin(GL_LINE_LOOP);
 		glVertex2f(x,y);
