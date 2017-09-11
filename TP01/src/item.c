@@ -25,21 +25,6 @@ void geraItem(QUADRADO player[], int tamanhoPlayer, QUADRADO obstaculos[], int n
 	//int tipoItem = (rand()%2);
 	int tipoItem = 0;
 	item->tipoItem = tipoItem;
-	switch(tipoItem){
-		case 0: // normal
-			break;
-		case 1: // escudo
-			player[0].escudo = 1;
-			break;
-		case 2: //
-
-			break;
-		case 3: //
-
-			break;
-		default:
-			break;
-	}
 }
 
 

@@ -26,4 +26,6 @@ int contador = 3;
 int contadorOpcao = 3;
 int liberarMenu;
 
+int pontuacao;
+
 #endif /* VARIAVEIS_H_ */

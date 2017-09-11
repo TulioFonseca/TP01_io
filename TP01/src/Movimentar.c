@@ -7,8 +7,10 @@
 
 #include "Movimentar.h"
 
+int tamanhoPlayer;
+int pontuacao;
 
-int movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], int tamanhoPlayer, QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item){
+void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item){
 
 	if (!PAUSE){
 
@@ -23,22 +25,22 @@ int movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], int tamanhoPlay
 
 		if (direcao == CIMA){
 			player[0].y += PASSO;
-			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) tamanhoPlayer = morre(&player[0], tamanhoPlayer);
+			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player);
 
 		}else if (direcao == BAIXO){
 			player[0].y -= PASSO;
-			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) tamanhoPlayer = morre(&player[0], tamanhoPlayer);
+			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player);
 
 		}else if (direcao == DIREITA){
 			player[0].x += PASSO;
-			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) tamanhoPlayer = morre(&player[0], tamanhoPlayer);
+			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player);
 
 		}else if(direcao == ESQUERDA){
 			player[0].x -= PASSO;
-			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) tamanhoPlayer = morre(&player[0], tamanhoPlayer);
+			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player);
 		}
 		if (colisaoParede(player[0].x,player[0].y)){
-			tamanhoPlayer= morre(&player[0], tamanhoPlayer);
+			morre(player);
 		}
 
 
@@ -52,10 +54,11 @@ int movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], int tamanhoPlay
 				case 0: // normal
 					tamanhoPlayer++;
 					player[tamanhoPlayer] = ultimo;
+					pontuacao++;
 					break;
-				case 1: // ivulneravel
-					player[0].escudo = true;
-
+				case 1: // escudo
+					for(int i=0; i <= tamanhoPlayer; i++)
+						player[i].escudo = true;
 					break;
 				case 3: //
 
@@ -73,24 +76,36 @@ int movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], int tamanhoPlay
 
 
 	}
-	return tamanhoPlayer;
 }
 
 
 
-int morre(QUADRADO* player, int tamanhoPlayer){
-	//printf("PASSEI AQUI \n");
-	//if(player->escudo){
-		//player->escudo = false;
 
-		//return tamanhoPlayer;
-	//}
 
-	//if(tamanhoPlayer == 0) exit(0);
+void morre(QUADRADO player[]){
 
-	//tamanhoPlayer--;
-	//return tamanhoPlayer;
+	for(int i=0; i <= tamanhoPlayer; i++){
+		if(player[i].escudo){
+			player[i].escudo = false;
+			player[i].duracaoEscudo = 7;
+			continue;
+		}
+		if(player[i].duracaoEscudo > 0){
+			player[i].duracaoEscudo--;
+			continue;
+		}else if(tamanhoPlayer == 0) finalJogo();
+		else{
+			tamanhoPlayer--;
+			for(int j=0; j <= tamanhoPlayer; j++)
+				player[i].escudo = true;
+			break;
+		}
+	}
 
+}
+
+void finalJogo(){
+	printf("PONTUACAO: %5d", pontuacao);
 	exit(0);
 }
 

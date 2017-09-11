@@ -99,7 +99,7 @@ void redimensiona(int w, int h)
 }
 
 void atualiza() {
-	tamanhoPlayer = movimentarObjeto(direcao, PAUSE, player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item);
+	movimentarObjeto(direcao, PAUSE, player, obstaculos, NUMERO_MAX_OBSTACULOS, item);
 	glutTimerFunc(velocidade, atualiza, 0);
 	glutPostRedisplay();
 

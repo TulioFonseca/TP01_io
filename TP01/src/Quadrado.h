@@ -16,6 +16,7 @@ typedef struct quadrado {
 	float altura;
 	bool escudo;
 	int tipoItem;
+	int duracaoEscudo;
 } QUADRADO;
 
 #endif /* QUADRADO_H_ */
