@@ -6,9 +6,14 @@
  */
 
 #include "Movimentar.h"
+#include <stdio.h>
+#include <string.h>
 
 int tamanhoPlayer;
 int pontuacao;
+
+
+
 
 void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item){
 
@@ -40,7 +45,8 @@ void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obst
 			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player);
 		}
 		if (colisaoParede(player[0].x,player[0].y)){
-			morre(player);
+			//morre(player);
+			finalJogo();
 		}
 
 
@@ -105,6 +111,8 @@ void morre(QUADRADO player[]){
 }
 
 void finalJogo(){
+
+
 	printf("PONTUACAO: %5d", pontuacao);
 	exit(0);
 }

@@ -55,7 +55,7 @@ bool colideObstaculos(QUADRADO *quadrado, QUADRADO obstaculos[], int numeroMaxOb
 }
 
 bool colisaoParede(float pontoX, float pontoY){
-	if (pontoY >= 100.0 || pontoX >= 100.0 || pontoX <= 0.0 || pontoY <= 0.0 ){
+	if (pontoY >= 85.0 || pontoX >= 100.0 || pontoX <= 0.0 || pontoY <= 0.0 ){
 			return true;
 		}
 		return false;

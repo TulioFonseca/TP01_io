@@ -13,6 +13,7 @@
 #include <stdbool.h>
 
 
+
 void reiniciar();
 int reiniciando();
 int tecladoMovimentacao (unsigned char key, int x, int y);

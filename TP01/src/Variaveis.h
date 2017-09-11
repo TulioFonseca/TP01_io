@@ -9,6 +9,14 @@
 #define VARIAVEIS_H_
 #include <stdbool.h>
 
+int pontuacao;
+char pontos[100];
+char ponto[100];
+
+char vidas[100];
+char vida[100];
+
+
 int NUMERO_MAX_OBSTACULOS = 10;
 int pontoX = 50, pontoY = 50;
 int direcao = 0;

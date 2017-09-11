@@ -9,7 +9,6 @@
 #include "Teclado.h"
 #include "Variaveis.h"
 
-
 QUADRADO player[1000000]; //tamanho total para ocupar toda a tela
 QUADRADO* item;
 QUADRADO obstaculos[10];
@@ -25,22 +24,37 @@ void desenhaQuadrado(QUADRADO quadrado){
     glEnd();
 }
 
+
+
 void desenhaCena(void)
-{	glMatrixMode(GL_MODELVIEW);
+{
+	int life = pontuacao;
+	strcpy(pontos, "Pontuacao = ");
+	sprintf(ponto, "%d", pontuacao);
+	strcat(pontos, ponto);
+
+
+	strcpy(vidas, "Vidas = ");
+	sprintf(vida, "%d", life);
+	strcat(vidas, vida);
+
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glColor3f(0.65, 0.9, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
+	DesenhaPontuacao(pontos,2,95);
+	DesenhaPontuacao(vidas,40,95);
 	glColor3f(1, 0, 0);
-	glLineWidth(10.0f);
+	glLineWidth(2.0f);
 	glBegin(GL_LINE_LOOP); // Desenhando o contorno do labirinto;
 		glVertex3f(0,0,0);
-		glVertex3f(0,100,0);
-		glVertex3f(0,100,0);
-		glVertex3f(100,100,0);
-		glVertex3f(100,100,0);
+		glVertex3f(0,87,0);
+		glVertex3f(0,87,0);
+		glVertex3f(100,87,0);
+		glVertex3f(100,87,0);
 		glVertex3f(100,0,0);
 	glEnd();
 	glColor3f(1, 0, 0); //
-	//glFlush();
     // Desenha Player
     glColor3f(0, 0, 1);
     for(int i = 0; i <= tamanhoPlayer; i++){
@@ -57,7 +71,7 @@ void desenhaCena(void)
 			glColor3f(0, 1, 0);
 			break;
 		case 1: // ivulneravel
-			glColor3f(1, 1, 0);
+			glColor3f(1, 0.2, 0);
 			break;
 		case 3: //
 
@@ -79,6 +93,7 @@ void inicializa(void)
     // cor para limpar a tela
     glClearColor(0, 0, 0, 0);
     //Cria Obstaculos
+
     criaObstaculos(&player[0], obstaculos, NUMERO_MAX_OBSTACULOS);
     item = malloc(sizeof(QUADRADO));
     geraItem(player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item);

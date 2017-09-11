@@ -53,6 +53,28 @@ int selecionar(int contador){
 }
 
 
+void DesenhaPontuacao(char *string, int x, int y){
+	    glPushMatrix();
+	        // Posição no universo onde o texto será colocado
+	        //glRasterPos2f(-win,win-(win*0.08));
+	  	glRasterPos2f(x,y);
+	        // Exibe caracter a caracter
+		while(*string)
+			 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,*string++);
+		glPopMatrix();
+}
+
+void DesenhaBordaPontucao(int x, int y){
+	glLineWidth(1.0f);
+	glColor3f(1.00f, 0.00f, 0.00f);
+		glBegin(GL_LINE_LOOP);
+		glVertex2f(x,y);
+		glVertex2f(95,y);
+		glVertex2f(95, y-15);
+		glVertex2f(x, y-15);
+	glEnd();
+
+}
 
 void DesenhaBorda(int x, int y){
 	glLineWidth(1.0f);

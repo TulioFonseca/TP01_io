@@ -19,5 +19,6 @@ int selecionar(int contador);
 void DesenhaBorda(int x, int y);
 void DesenhaTextoInstrucao(char *string, int x , int y);
 void menuOpcao(int opcao, int contador);
+void DesenhaPontuacao(char *string, int x , int y);
 
 #endif /* TELASDEMENU_H_ */

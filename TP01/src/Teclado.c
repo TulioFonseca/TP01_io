@@ -63,7 +63,8 @@ int tecladoMovimentacao (unsigned char key, int x, int y){
 					  }
 					  break;
 				  case 27:
-					 exit(0);
+					  finalJogo();
+					 //exit(0);
 					 break;
 				  case 119: // 'w'
 					  if(reinicia){
@@ -175,7 +176,8 @@ void tecladoEspecialMovimentacaoMenu(int key, int x, int y){
 int tecladoMovimentacaoMenu(unsigned char key, int x, int y){
 	switch(key){
 				  case 27:
-					 exit(0);
+					  finalJogo();
+					 //exit(0);
 					 break;
 				  case 13:
 					  liberarMenu = selecionar(contador);

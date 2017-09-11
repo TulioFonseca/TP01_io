@@ -16,8 +16,8 @@ void criaObstaculos(QUADRADO player[], QUADRADO obstaculos[], int numeroMaxObsta
 	srand(clock());
 	while(i < numeroMaxObstaculos){
 
-		float x=(rand()%80 + 10);
-		float y=(rand()%80 + 10);
+		float x=(rand()%70 + 10);
+		float y=(rand()%70 + 10);
 		QUADRADO quadrado = {x,y,3,3};
 
 		if(colideObstaculos(&quadrado, obstaculos, numeroMaxObstaculos) || verificaColisao(&quadrado, &player[0])) continue;
