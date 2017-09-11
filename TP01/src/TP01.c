@@ -4,36 +4,15 @@
 #include <GL/freeglut.h>
 #include <math.h>
 #include <stdbool.h>
-#include "Movimentar.h"
 #include "Quadrado.h"
 #include "colisao.h"
-#include "TelasDeMenu.h"
+#include "Teclado.h"
+#include "Variaveis.h"
 
-
-
-int NUMERO_MAX_OBSTACULOS = 10;
-int pontoX = 50, pontoY = 50;
-int direcao = 0;
-bool menuAtivado = true;
-
-int velocidade = 33;
-const int larguraTela = 400;
-const int alturaTela = 400;
-int tamanhoPlayer;
-
-bool reinicia = false;
-bool PAUSE = false;
-bool sistema;
-int contador = 3;
-int contadorOpcao = 3;
-int liberarMenu;
 
 QUADRADO player[1000000]; //tamanho total para ocupar toda a tela
 QUADRADO* item;
 QUADRADO obstaculos[10];
-
-
-
 
 void desenhaQuadrado(QUADRADO quadrado){
 
@@ -45,7 +24,6 @@ void desenhaQuadrado(QUADRADO quadrado){
 
     glEnd();
 }
-
 
 void desenhaCena(void)
 {	glMatrixMode(GL_MODELVIEW);
@@ -62,26 +40,17 @@ void desenhaCena(void)
 		glVertex3f(100,0,0);
 	glEnd();
 	glColor3f(1, 0, 0); //
-
 	//glFlush();
-
-
     // Desenha Player
     glColor3f(0, 0, 1);
-
     for(int i = 0; i <= tamanhoPlayer; i++){
-
     	desenhaQuadrado(player[i]);
     }
-
-
     // Desenha os obstaculos
     glColor3f(1, 1,1);
     for(int i = 0; i < NUMERO_MAX_OBSTACULOS; i++){
     	desenhaQuadrado(obstaculos[i]);
     }
-
-
     //Desenha Item
     switch(item->tipoItem){
 		case 0: // normal
@@ -99,15 +68,10 @@ void desenhaCena(void)
 		default:
 			break;
 	}
-
     desenhaQuadrado(*item);
-
-      //   DesenhaTexto(texto);
-
 	glutSwapBuffers();
 
 }
-
 // Inicia algumas variáveis de estado
 
 void inicializa(void)
@@ -121,9 +85,7 @@ void inicializa(void)
 	//Cobra inicia no meio da tela
     QUADRADO quadrado = {1,1,3,3};
     player[0] = quadrado;
-    //menu();
 }
-
 
 // Callback de redimensionamento
 void redimensiona(int w, int h)
@@ -136,15 +98,12 @@ void redimensiona(int w, int h)
    glLoadIdentity();
 }
 
-
-
 void atualiza() {
 	tamanhoPlayer = movimentarObjeto(direcao, PAUSE, player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item);
 	glutTimerFunc(velocidade, atualiza, 0);
 	glutPostRedisplay();
 
 }
-
 
 void tecladoEspecial (int key, int x, int y){
 	if(!menuAtivado){
@@ -154,203 +113,21 @@ void tecladoEspecial (int key, int x, int y){
 	}
 }
 
-
 // Callback de evento de teclado
 void teclado(unsigned char key, int x, int y)
 {
 	if(!menuAtivado){
-		tecladoMovimentacao(key,x,y);
-
-	}else{
-		tecladoMovimentacaoMenu(key,x, y);
-	}
-
-}
-
-
-
-void reiniciar(){
-	PAUSE = true;
-    reinicia = true;
-
-    glutDisplayFunc(menuOpcao);
-
-
-   // glutSwapBuffers();
-
-}
-void reiniciando(){
-	printf("%d \n",contadorOpcao);
-	if(contadorOpcao == 3){
-			  direcao = 0;
-			  NUMERO_MAX_OBSTACULOS = 10;
-			  pontoX = 50, pontoY = 50;
-			  direcao = 0;
-			  velocidade = 33;
-			  tamanhoPlayer = 0;
-			  inicializa();
-			  PAUSE = false;
-			  glutDisplayFunc(desenhaCena);
-
-		}else if(contadorOpcao == 2){
-			PAUSE = false;
+		if(tecladoMovimentacao(key,x,y) == 1){
 			glutDisplayFunc(desenhaCena);
 		}
-}
 
-
-
-
-
-void tecladoMovimentacao (unsigned char key, int x, int y){
-	switch(key){
-				case 13:
-					  if(reinicia){
-						  reinicia = false;
-						  reiniciando();
-
-					  }
-					  break;
-				  case 27:
-					 exit(0);
-					 break;
-				  case 119: // 'w'
-					  if(reinicia){
-							if(contadorOpcao < 3){
-								 menuOpcao(SOBE,contadorOpcao);
-								 contadorOpcao++;
-
-							}
-					  }else{
-						  if (direcao != BAIXO)
-							  direcao = CIMA;
-					  }
-					  break;
-				  case 115: // 's'
-					  if(reinicia){
-						  if(contadorOpcao >2){
-							  menuOpcao(DESCE,contadorOpcao);
-							  contadorOpcao--;
-						  }
-					  }else{
-						  if(direcao != CIMA)
-							  direcao = BAIXO;}
-					  break;
-				  case 100:// 'd'
-					  if(direcao != ESQUERDA)
-						  direcao = DIREITA;
-					  break;
-				  case 97: // 'a'
-					  if(direcao != DIREITA)
-						  direcao = ESQUERDA;
-					  break;
-				  case 'p':
-					  PAUSE = !PAUSE;
-					  break;
-				  case 'r':
-					  reiniciar();
-					  break;
-				  default:
-					 break;
+	}else{
+		if(tecladoMovimentacaoMenu(key,x, y) == 1){
+			glutDisplayFunc(desenhaCena);
+		}
 	}
+
 }
-void tecladoEspecialMovimentacao(int key, int x, int y){
-	switch(key){
-			case 13:
-				  if(reinicia){
-					  reinicia = false;
-					  reiniciando();
-
-				  }
-				  break;
-			case UP: // 'w'
-				if(reinicia){
-					if(contadorOpcao < 3){
-						 menuOpcao(SOBE,contadorOpcao);
-						 contadorOpcao++;
-
-					}
-				}else{
-					if (direcao != BAIXO)
-						direcao = CIMA;
-				}
-			    break;
-			case DOWN: // 's'
-				if(reinicia){
-					if(contadorOpcao >2){
-						menuOpcao(DESCE,contadorOpcao);
-						contadorOpcao--;
-
-					}
-				}else{
-					if (direcao != CIMA)
-						direcao = BAIXO;
-				}
-			    break;
-			case RIGHT: //d
-				if (direcao != ESQUERDA)
-					direcao = DIREITA;
-				break;
-			case LEFT: // 'a'
-				if (direcao != DIREITA)
-					direcao = ESQUERDA;
-				break;
-			default:
-			 break;
-			}
-}
-
-void tecladoEspecialMovimentacaoMenu(int key, int x, int y){
-	switch(key){
-			case UP: // 'w'
-				if(contador < 3){
-					menu(SOBE,contador);
-					contador++;
-
-				}
-			    break;
-			case DOWN: // 's'
-				if(contador > 1){
-					menu(DESCE,contador);
-					contador--;
-				}
-				break;
-			default:
-				break;
-			}
-}
-
-void tecladoMovimentacaoMenu(unsigned char key, int x, int y){
-	switch(key){
-				  case 27:
-					 exit(0);
-					 break;
-				  case 13:
-					  liberarMenu = selecionar(contador);
-					  if(liberarMenu == 1){
-						  menuAtivado = false;
-						  glutDisplayFunc(desenhaCena);
-					  }
-					  break;
-				  case 119: // 'w'
-					 if(contador < 3){
-						 menu(SOBE,contador);
-						 contador++;
-					 }
-					  break;
-				  case 115: // 's'
-	     			  if(contador > 1){
-	     				 menu(DESCE,contador);
-	     				 contador--;
-	     			  }
-					  break;
-				  default:
-					 break;
-				}
-}
-
-
-
 
 
 // Rotina principal
@@ -371,12 +148,6 @@ int main(int argc, char **argv) {
 	glutSpecialFunc(tecladoEspecial);
 	glutTimerFunc(0, atualiza, 0);
 	inicializa();
-
 	glutMainLoop();
 	return 0;
 }
-
-
-
-
-
