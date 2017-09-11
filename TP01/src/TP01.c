@@ -50,10 +50,9 @@ void desenhaQuadrado(QUADRADO quadrado){
 void desenhaCena(void)
 {	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1, 0, 0);
-	glLineWidth(5.0f);
+	glLineWidth(10.0f);
 	glBegin(GL_LINE_LOOP); // Desenhando o contorno do labirinto;
 		glVertex3f(0,0,0);
 		glVertex3f(0,100,0);
@@ -184,11 +183,11 @@ void reiniciando(){
 	printf("%d \n",contadorOpcao);
 	if(contadorOpcao == 3){
 			  direcao = 0;
-			  /*NUMERO_MAX_OBSTACULOS = 10;
+			  NUMERO_MAX_OBSTACULOS = 10;
 			  pontoX = 50, pontoY = 50;
 			  direcao = 0;
 			  velocidade = 33;
-			  tamanhoPlayer = 0;*/
+			  tamanhoPlayer = 0;
 			  inicializa();
 			  PAUSE = false;
 			  glutDisplayFunc(desenhaCena);
