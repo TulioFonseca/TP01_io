@@ -18,7 +18,7 @@ char vida[100];
 
 
 int NUMERO_MAX_OBSTACULOS = 10;
-int pontoX = 50, pontoY = 50;
+//int pontoX = 50, pontoY = 50;
 int direcao = 0;
 bool menuAtivado = true;
 

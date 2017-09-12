@@ -63,7 +63,7 @@ int tecladoMovimentacao (unsigned char key, int x, int y){
 					  }
 					  break;
 				  case 27:
-					  finalJogo();
+					  finalJogo(PAUSE);
 					 //exit(0);
 					 break;
 				  case 119: // 'w'
@@ -176,7 +176,7 @@ void tecladoEspecialMovimentacaoMenu(int key, int x, int y){
 int tecladoMovimentacaoMenu(unsigned char key, int x, int y){
 	switch(key){
 				  case 27:
-					  finalJogo();
+					  finalJogo(PAUSE);
 					 //exit(0);
 					 break;
 				  case 13:
@@ -204,3 +204,6 @@ int tecladoMovimentacaoMenu(unsigned char key, int x, int y){
 				}
 	return 0;
 }
+
+
+

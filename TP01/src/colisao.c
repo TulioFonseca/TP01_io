@@ -60,3 +60,11 @@ bool colisaoParede(float pontoX, float pontoY){
 		}
 		return false;
 }
+
+bool colisaoParedeMouse(float pontoX, float pontoY){
+	if (pontoY >= 85.0 || pontoX >= 98.0 || pontoX <= 0.0 || pontoY <= 1.0 ){
+			return true;
+		}
+		return false;
+}
+

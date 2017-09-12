@@ -26,6 +26,15 @@ void menu(int opcao, int contador){
 
 }
 
+void gameOver(){
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1, 1,1);
+	DesenhaGameOver("GAME OVER",30,50);
+	//DesenhaBorda(posicaoXborda,posicaoYborda);
+	glutSwapBuffers();
+}
+
+
 void menuOpcao(int opcao, int contador){
 	glClear(GL_COLOR_BUFFER_BIT);
 		glColor3f(1, 1,1);
@@ -62,6 +71,18 @@ void DesenhaPontuacao(char *string, int x, int y){
 		while(*string)
 			 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,*string++);
 		glPopMatrix();
+}
+void DesenhaGameOver(char *string, int x , int y){
+	glPushMatrix();
+		// Posição no universo onde o texto será colocado
+		//glRasterPos2f(-win,win-(win*0.08));
+	glRasterPos2f(x,y);
+		// Exibe caracter a caracter
+	while(*string)
+		 glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*string++);
+	glPopMatrix();
+
+
 }
 
 void DesenhaBordaPontucao(int x, int y){

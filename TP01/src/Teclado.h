@@ -20,7 +20,7 @@ int tecladoMovimentacao (unsigned char key, int x, int y);
 void tecladoEspecialMovimentacao(int key, int x, int y);
 void tecladoEspecialMovimentacaoMenu(int key, int x, int y);
 int tecladoMovimentacaoMenu(unsigned char key, int x, int y);
-
+void tecladoMouse(unsigned char key, int x, int y);
 
 
 #endif /* TECLADO_H_ */

@@ -18,5 +18,5 @@ bool colideObstaculos(QUADRADO* quadrado, QUADRADO obstaculos[], int numeroMaxOb
 
 bool colisaoParede(float pontoX, float pontoY);
 
-
+bool colisaoParedeMouse(float pontoX, float pontoY);
 #endif /* COLISAO_H_ */

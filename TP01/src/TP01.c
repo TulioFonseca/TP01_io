@@ -13,6 +13,11 @@ QUADRADO player[1000000]; //tamanho total para ocupar toda a tela
 QUADRADO* item;
 QUADRADO obstaculos[10];
 
+
+
+float pontoMouseX, pontoMouseY;
+
+
 void desenhaQuadrado(QUADRADO quadrado){
 
     glBegin(GL_POLYGON);
@@ -23,6 +28,7 @@ void desenhaQuadrado(QUADRADO quadrado){
 
     glEnd();
 }
+
 
 
 
@@ -113,8 +119,14 @@ void redimensiona(int w, int h)
    glLoadIdentity();
 }
 
+
+
 void atualiza() {
+
 	movimentarObjeto(direcao, PAUSE, player, obstaculos, NUMERO_MAX_OBSTACULOS, item);
+
+
+	//movimentaMouse(player,pontoMouseX,pontoMouseY,obstaculos, NUMERO_MAX_OBSTACULOS, item, PAUSE);
 	glutTimerFunc(velocidade, atualiza, 0);
 	glutPostRedisplay();
 
@@ -144,6 +156,11 @@ void teclado(unsigned char key, int x, int y)
 
 }
 
+void movimentoMouse(int x, int y) {
+	pontoMouseX = x;
+	pontoMouseY = y;
+}
+
 
 // Rotina principal
 int main(int argc, char **argv) {
@@ -161,7 +178,13 @@ int main(int argc, char **argv) {
 	glutReshapeFunc(redimensiona);
 	glutKeyboardFunc(teclado);
 	glutSpecialFunc(tecladoEspecial);
+	glutPassiveMotionFunc(movimentoMouse);
 	glutTimerFunc(0, atualiza, 0);
+
+
+
+
+
 	inicializa();
 	glutMainLoop();
 	return 0;
