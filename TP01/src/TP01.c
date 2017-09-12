@@ -10,6 +10,7 @@
 #include "Variaveis.h"
 
 QUADRADO player[1000000]; //tamanho total para ocupar toda a tela
+QUADRADO* itemPonto;
 QUADRADO* item;
 QUADRADO obstaculos[10];
 
@@ -34,7 +35,7 @@ void desenhaQuadrado(QUADRADO quadrado){
 
 void desenhaCena(void)
 {
-	int life = pontuacao;
+	int life = tamanhoPlayer+1;
 	strcpy(pontos, "Pontuacao = ");
 	sprintf(ponto, "%d", pontuacao);
 	strcat(pontos, ponto);
@@ -61,29 +62,42 @@ void desenhaCena(void)
 		glVertex3f(100,0,0);
 	glEnd();
 	glColor3f(1, 0, 0); //
+
     // Desenha Player
     glColor3f(0, 0, 1);
     for(int i = 0; i <= tamanhoPlayer; i++){
     	desenhaQuadrado(player[i]);
     }
+
     // Desenha os obstaculos
     glColor3f(1, 1,1);
     for(int i = 0; i < NUMERO_MAX_OBSTACULOS; i++){
     	desenhaQuadrado(obstaculos[i]);
     }
+
+    //Desenha ItemPonto
+    glColor3f(0, 1, 0);
+    desenhaQuadrado(*itemPonto);
+
     //Desenha Item
     switch(item->tipoItem){
 		case 0: // normal
-			glColor3f(0, 1, 0);
+			glColor3f(1, 0.2, 0);
 			break;
 		case 1: // ivulneravel
-			glColor3f(1, 0.2, 0);
+
 			break;
 		case 3: //
 
 			break;
 		case 4: //
 
+			break;
+		case 5: //
+			glColor3f(1, 0.2, 0);
+			break;
+		case 6: //
+			glColor3f(1, 0.98, 0);
 			break;
 		default:
 			break;
@@ -98,11 +112,15 @@ void inicializa(void)
 {
     // cor para limpar a tela
     glClearColor(0, 0, 0, 0);
-    //Cria Obstaculos
 
+    //Cria Obstaculos
     criaObstaculos(&player[0], obstaculos, NUMERO_MAX_OBSTACULOS);
+
     item = malloc(sizeof(QUADRADO));
-    geraItem(player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item);
+    itemPonto = malloc(sizeof(QUADRADO));
+    geraPonto(player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item, itemPonto);
+    geraItem(player, tamanhoPlayer, obstaculos, NUMERO_MAX_OBSTACULOS, item, itemPonto);
+
 	//Cobra inicia no meio da tela
     QUADRADO quadrado = {1,1,3,3};
     player[0] = quadrado;
@@ -123,10 +141,9 @@ void redimensiona(int w, int h)
 
 void atualiza() {
 
-	movimentarObjeto(direcao, PAUSE, player, obstaculos, NUMERO_MAX_OBSTACULOS, item);
+	movimentarObjeto(direcao, PAUSE, player, obstaculos, NUMERO_MAX_OBSTACULOS, item,itemPonto);
 
-
-	//movimentaMouse(player,pontoMouseX,pontoMouseY,obstaculos, NUMERO_MAX_OBSTACULOS, item, PAUSE);
+	//movimentaMouse(player,pontoMouseX,pontoMouseY,obstaculos, NUMERO_MAX_OBSTACULOS, item, PAUSE, itemPonto);
 	glutTimerFunc(velocidade, atualiza, 0);
 	glutPostRedisplay();
 

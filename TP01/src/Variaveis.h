@@ -10,12 +10,16 @@
 #include <stdbool.h>
 
 int pontuacao;
-char pontos[100];
-char ponto[100];
+char pontos[1000];
+char ponto[1000];
 
-char vidas[100];
-char vida[100];
+char vidas[1000];
+char vida[1000];
 
+bool escudo;
+int duracaoEscudo;
+int novoItem;
+int colidiuItem;
 
 int NUMERO_MAX_OBSTACULOS = 10;
 //int pontoX = 50, pontoY = 50;

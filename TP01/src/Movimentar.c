@@ -8,16 +8,21 @@
 #include "Movimentar.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 int tamanhoPlayer;
 int pontuacao;
+bool escudo;
+int duracaoEscudo;
+int novoItem;
+int colidiuItem;
 
 
-void movimentaMouse(QUADRADO player[], int x, int y, QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item,bool PAUSE){
+
+void movimentaMouse(QUADRADO player[], int x, int y, QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item, bool PAUSE, QUADRADO* ponto){
 		QUADRADO ultimo = player[tamanhoPlayer];
 
 				//Apagando rastro do player
-
 
 		player[0].y += ((100-(y/4))-player[0].y);
 		player[0].x += (((x/4))-player[0].x);
@@ -31,33 +36,30 @@ void movimentaMouse(QUADRADO player[], int x, int y, QUADRADO *obstaculos, int n
 
 			finalJogo(PAUSE);
 		}
+		//Verifica se pegou o ponto
+		if(verificaColisao(ponto, &player[0])){
+			//aumenta tamanho player
+			tamanhoPlayer++;
+			player[tamanhoPlayer] = ultimo;
+			pontuacao++;
+			geraPonto(player, tamanhoPlayer, obstaculos, numeroMaxObstaculos, item, ponto);
+		}
+
+		//Verifica se pegou o item
 		if(verificaColisao(item, &player[0])){
-					//aumenta tamanho player
-					switch(item->tipoItem){
-						case 0: // normal
-							tamanhoPlayer++;
-							player[tamanhoPlayer] = ultimo;
-							pontuacao++;
-							break;
-						case 1: // escudo
-							for(int i=0; i <= tamanhoPlayer; i++)
-								player[i].escudo = true;
-							break;
-						case 3: //
-
-							break;
-						case 4: //
-
-							break;
-						default:
-							break;
-					}
-					geraItem(player, tamanhoPlayer, obstaculos, numeroMaxObstaculos, item);
+			funcaoItem(item, &player[0], obstaculos, numeroMaxObstaculos, ponto);
+		}
+		//Gera novo item
+		if(colidiuItem && novoItem > 0) novoItem --;
+		else if(colidiuItem){
+			colidiuItem = false;
+			geraItem(player, tamanhoPlayer, obstaculos, numeroMaxObstaculos, item, ponto);
+		}
 
 		}
-}
 
-void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item){
+
+void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item, QUADRADO* ponto){
 	if (!PAUSE){
 		//salvando posicao ultima posicao player
 		QUADRADO ultimo = player[tamanhoPlayer];
@@ -67,45 +69,41 @@ void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obst
 		}
 		if (direcao == CIMA){
 			player[0].y += PASSO;
-			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player,PAUSE);
+			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(&player[0],PAUSE);
 		}else if (direcao == BAIXO){
 			player[0].y -= PASSO;
-			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player,PAUSE);
+			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(&player[0],PAUSE);
 		}else if (direcao == DIREITA){
 			player[0].x += PASSO;
-			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player,PAUSE);
+			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(&player[0],PAUSE);
 		}else if(direcao == ESQUERDA){
 			player[0].x -= PASSO;
-			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(player,PAUSE);
+			if(colideObstaculos(&player[0], obstaculos, numeroMaxObstaculos)) morre(&player[0],PAUSE);
 		}
 		if (colisaoParede(player[0].x,player[0].y)){
 			//morre(player);
 			finalJogo(PAUSE);
 		}
+		//Verifica se pegou o ponto
+		if(verificaColisao(ponto, &player[0])){
+			//aumenta tamanho player
+			tamanhoPlayer++;
+			player[tamanhoPlayer] = ultimo;
+			pontuacao++;
+			geraPonto(player, tamanhoPlayer, obstaculos, numeroMaxObstaculos, item, ponto);
+		}
+
 		//Verifica se pegou o item
 		if(verificaColisao(item, &player[0])){
-			//aumenta tamanho player
-			switch(item->tipoItem){
-				case 0: // normal
-					tamanhoPlayer++;
-					player[tamanhoPlayer] = ultimo;
-					pontuacao++;
-					break;
-				case 1: // escudo
-					for(int i=0; i <= tamanhoPlayer; i++)
-						player[i].escudo = true;
-					break;
-				case 3: //
+			funcaoItem(item, &player[0], obstaculos, numeroMaxObstaculos, ponto);
 
-					break;
-				case 4: //
+		}
 
-					break;
-				default:
-					break;
-			}
-			//Gera novo item
-			geraItem(player, tamanhoPlayer, obstaculos, numeroMaxObstaculos, item);
+		//Gera novo item
+		if(colidiuItem && novoItem > 0) novoItem --;
+		else if(colidiuItem){
+			colidiuItem = false;
+			geraItem(player, tamanhoPlayer, obstaculos, numeroMaxObstaculos, item, ponto);
 		}
 
 
@@ -114,29 +112,20 @@ void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obst
 
 
 
+void morre(QUADRADO* player, bool PAUSE){
+	if(escudo){
+		escudo = false;
+		duracaoEscudo = 7;
 
+	}else if(duracaoEscudo > 0){
+		duracaoEscudo--;
 
-void morre(QUADRADO player[], bool PAUSE){
+	}else if(tamanhoPlayer == 0) {
+		finalJogo(PAUSE);
 
-	for(int i=0; i <= tamanhoPlayer; i++){
-		if(player[i].escudo){
-			player[i].escudo = false;
-			player[i].duracaoEscudo = 7;
-			continue;
-		}
-		if(player[i].duracaoEscudo > 0){
-			player[i].duracaoEscudo--;
-			continue;
-		}else if(tamanhoPlayer == 0){
-			printf("Teste");
-			finalJogo(PAUSE);
-		}
-		else{
-			tamanhoPlayer--;
-			for(int j=0; j <= tamanhoPlayer; j++)
-				player[i].escudo = true;
-			break;
-		}
+	}else{
+		tamanhoPlayer--;
+		duracaoEscudo = 7;
 	}
 
 }
