@@ -14,10 +14,15 @@ QUADRADO* itemPonto;
 QUADRADO* item;
 QUADRADO obstaculos[10];
 
-
-
+//---------------------MOUSE----------
+//bool movimentaMouse = false;
 float pontoMouseX, pontoMouseY;
+bool mouse = false;
+bool mouseHabilitado = false;
 
+//-------------------------------------
+
+bool trava = false;
 
 void desenhaQuadrado(QUADRADO quadrado){
 
@@ -140,10 +145,11 @@ void redimensiona(int w, int h)
 
 
 void atualiza() {
-
-	movimentarObjeto(direcao, PAUSE, player, obstaculos, NUMERO_MAX_OBSTACULOS, item,itemPonto);
-
-	//movimentaMouse(player,pontoMouseX,pontoMouseY,obstaculos, NUMERO_MAX_OBSTACULOS, item, PAUSE, itemPonto);
+	if(!menuAtivado && mouse){
+		movimentaMouse(player,pontoMouseX,pontoMouseY,obstaculos, NUMERO_MAX_OBSTACULOS, item, PAUSE, itemPonto);
+	}else if(!menuAtivado){
+		movimentarObjeto(direcao, PAUSE, player, obstaculos, NUMERO_MAX_OBSTACULOS, item,itemPonto);
+	}
 	glutTimerFunc(velocidade, atualiza, 0);
 	glutPostRedisplay();
 
@@ -176,6 +182,23 @@ void teclado(unsigned char key, int x, int y)
 void movimentoMouse(int x, int y) {
 	pontoMouseX = x;
 	pontoMouseY = y;
+
+
+}
+
+void clicaMouse(int button, int state, int x, int y){
+	if(mouse && mouseHabilitado){
+		if (button == GLUT_LEFT_BUTTON){
+				 if (state == GLUT_DOWN) {
+						if(x >= 10.0 && x <= 390.0 && y >= 140.0 && y <= 180.0 ){
+							menuAtivado = false;
+							glutDisplayFunc(desenhaCena);
+						}else if(x >= 10.0 && x <= 390.0 && y >= 200.0 && y <= 240.0 ){
+							exit(0);
+						}
+				 }
+		}
+	}
 }
 
 
@@ -188,21 +211,18 @@ int main(int argc, char **argv) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowSize(larguraTela, alturaTela);
 	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Quadrado");
-	if(menuAtivado){
+	glutCreateWindow("TP01_io");
+	if(menuAtivado ){
 		glutDisplayFunc(menu);
 	}
 	glutReshapeFunc(redimensiona);
 	glutKeyboardFunc(teclado);
 	glutSpecialFunc(tecladoEspecial);
 	glutPassiveMotionFunc(movimentoMouse);
+	glutMouseFunc(clicaMouse);
 	glutTimerFunc(0, atualiza, 0);
-
-
-
-
-
-	inicializa();
+    inicializa();
 	glutMainLoop();
 	return 0;
 }
+

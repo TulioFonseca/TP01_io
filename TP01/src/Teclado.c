@@ -14,21 +14,26 @@ int velocidade;
 const int larguraTela;
 const int alturaTela;
 int tamanhoPlayer;
-
+bool mouse;
 bool reinicia;
 bool PAUSE;
 bool sistema;
 int contador;
 int contadorOpcao;
 int liberarMenu;
-
-
+bool mouseHabilitado;
+int pontuacao;
 void reiniciar(){
-	PAUSE = true;
-    reinicia = true;
+	if(!mouse){
+		PAUSE = true;
+		reinicia = true;
+		glutDisplayFunc(menuOpcao);
 
-    glutDisplayFunc(menuOpcao);
+	}else{
 
+		glutDisplayFunc(menuOpcao);
+
+	}
 
 
 
@@ -41,6 +46,7 @@ int reiniciando(){
 			  direcao = 0;
 			  velocidade = 33;
 			  tamanhoPlayer = 0;
+			  pontuacao = 0;
 			  inicializa();
 			  PAUSE = false;
 	}else if(contadorOpcao == 2){
@@ -54,6 +60,7 @@ int reiniciando(){
 
 
 int tecladoMovimentacao (unsigned char key, int x, int y){
+
 	switch(key){
 				case 13:
 					  if(reinicia){
@@ -62,8 +69,13 @@ int tecladoMovimentacao (unsigned char key, int x, int y){
 
 					  }
 					  break;
+
+				  case 't':
+					  mouse = !mouse;
+					  mouseHabilitado = !mouseHabilitado;
+					break;
 				  case 27:
-					  finalJogo(PAUSE);
+					 finalJogo(PAUSE);
 					 //exit(0);
 					 break;
 				  case 119: // 'w'
@@ -100,6 +112,10 @@ int tecladoMovimentacao (unsigned char key, int x, int y){
 					  PAUSE = !PAUSE;
 					  break;
 				  case 'r':
+					  if(mouse || mouseHabilitado) {
+						  mouse = false;
+						  mouseHabilitado = false;
+					  }
 					  reiniciar();
 					  break;
 				  default:
@@ -163,7 +179,7 @@ void tecladoEspecialMovimentacaoMenu(int key, int x, int y){
 				}
 			    break;
 			case DOWN: // 's'
-				if(contador > 1){
+				if(contador > 2){
 					menu(DESCE,contador);
 					contador--;
 				}
@@ -176,8 +192,8 @@ void tecladoEspecialMovimentacaoMenu(int key, int x, int y){
 int tecladoMovimentacaoMenu(unsigned char key, int x, int y){
 	switch(key){
 				  case 27:
-					  finalJogo(PAUSE);
-					 //exit(0);
+					  //finalJogo(PAUSE);
+					 exit(0);
 					 break;
 				  case 13:
 					  liberarMenu = selecionar(contador);
@@ -185,6 +201,8 @@ int tecladoMovimentacaoMenu(unsigned char key, int x, int y){
 						  menuAtivado = false;
 						  return 1;
 
+					  }else if(liberarMenu == 2){
+						 return 2;
 					  }
 					  break;
 				  case 119: // 'w'
@@ -194,7 +212,7 @@ int tecladoMovimentacaoMenu(unsigned char key, int x, int y){
 					 }
 					  break;
 				  case 115: // 's'
-	     			  if(contador > 1){
+	     			  if(contador > 2){
 	     				 menu(DESCE,contador);
 	     				 contador--;
 	     			  }

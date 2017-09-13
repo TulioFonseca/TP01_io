@@ -7,7 +7,7 @@
 
 #ifndef TELASDEMENU_H_
 #define TELASDEMENU_H_
-
+#include <stdbool.h>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #define DESCE 1
@@ -20,5 +20,5 @@ void DesenhaBorda(int x, int y);
 void DesenhaTextoInstrucao(char *string, int x , int y);
 void menuOpcao(int opcao, int contador);
 void DesenhaPontuacao(char *string, int x , int y);
-
+void menuOpcoes(void);
 #endif /* TELASDEMENU_H_ */

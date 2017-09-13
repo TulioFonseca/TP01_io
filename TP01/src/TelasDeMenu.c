@@ -8,29 +8,56 @@
 
 int posicaoXborda = 5;
 int posicaoYborda = 70;
+bool mouse;
+bool mouseHabilitado;
+float pontoMouseX, pontoMouseY;
+int contadorParadaMouse = 0;
 
 void menu(int opcao, int contador){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1, 1,1);
 	DesenhaTextoInstrucao("Precione ENTER para selecionar",0,90);
 	DesenhaTexto("INICIAR JOGO",10,60);
-	DesenhaTexto("OPCOES",10,40);
-	DesenhaTexto("SAIR",10,20);
-
-	if(opcao == DESCE)
-		posicaoYborda -= 20;
-	if(opcao == SOBE)
-			posicaoYborda += 20;
+	DesenhaTexto("SAIR",10,40);
+	//DesenhaTexto("SAIR",10,20);
+	movimentoSetasMouseTeclado(opcao);
 	DesenhaBorda(posicaoXborda,posicaoYborda);
 	glutSwapBuffers();
 
+}
+
+
+
+
+void movimentoSetasMouseTeclado(int opcao){
+	 if(mouse){
+
+			if(!mouseHabilitado){
+				if(pontoMouseX >= 10.0 && pontoMouseX <= 390.0 && pontoMouseY >= 140.0 && pontoMouseY <= 180.0 ){
+					posicaoYborda = 70;
+				}else if(pontoMouseX >= 10.0 && pontoMouseX <= 390.0 && pontoMouseY >= 200.0 && pontoMouseY <= 240.0 ){
+					posicaoYborda = 30;
+				}
+			}else if (mouseHabilitado){
+				if(pontoMouseX >= 10.0 && pontoMouseX <= 390.0 && pontoMouseY >= 140.0 && pontoMouseY <= 180.0 ){
+					posicaoYborda = 70;
+				}else if(pontoMouseX >= 10.0 && pontoMouseX <= 390.0 && pontoMouseY >= 200.0 && pontoMouseY <= 240.0 ){
+					posicaoYborda = 50;
+				}
+			}
+
+		}else{
+			if(opcao == DESCE)
+				posicaoYborda -= 20;
+			if(opcao == SOBE)
+				posicaoYborda += 20;
+		}
 }
 
 void gameOver(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1, 1,1);
 	DesenhaGameOver("GAME OVER",30,50);
-	//DesenhaBorda(posicaoXborda,posicaoYborda);
 	glutSwapBuffers();
 }
 
@@ -42,19 +69,13 @@ void menuOpcao(int opcao, int contador){
 		DesenhaTexto("DESEJA REINICIAR O JOGO ?",10,80);
 		DesenhaTexto("SIM",10,60);
 		DesenhaTexto("NAO",10,40);
-
-		if(opcao == DESCE)
-			posicaoYborda -= 20;
-		if(opcao == SOBE)
-				posicaoYborda += 20;
+		movimentoSetasMouseTeclado(opcao);
 		DesenhaBorda(posicaoXborda,posicaoYborda);
 		glutSwapBuffers();
 }
 int selecionar(int contador){
-	if (contador == 1){
+	if(contador == 2){
 		exit(0);
-	}else if(contador == 2){
-
 	}else if(contador == 3){
 		return 1;
 	}
@@ -135,3 +156,4 @@ void DesenhaTextoInstrucao(char *string, int x , int y)
 		 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,*string++);
 	glPopMatrix();
 }
+
