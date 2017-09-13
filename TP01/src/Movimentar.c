@@ -16,10 +16,10 @@ bool escudo;
 int duracaoEscudo;
 int novoItem;
 int colidiuItem;
+bool portal;
 
 
-
-void movimentaMouse(QUADRADO player[], int x, int y, QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item, bool PAUSE, QUADRADO* ponto){
+void movimentaMouse(QUADRADO player[], int x, int y, QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item, bool PAUSE, QUADRADO* ponto, QUADRADO* portal1, QUADRADO* portal2){
 		QUADRADO ultimo = player[tamanhoPlayer];
 
 				//Apagando rastro do player
@@ -47,19 +47,37 @@ void movimentaMouse(QUADRADO player[], int x, int y, QUADRADO *obstaculos, int n
 
 		//Verifica se pegou o item
 		if(verificaColisao(item, &player[0])){
-			funcaoItem(item, &player[0], obstaculos, numeroMaxObstaculos, ponto);
+			funcaoItem(item, &player[0], obstaculos, numeroMaxObstaculos, ponto, portal1, portal2);
+
 		}
-		//Gera novo item
+
+		//Gera novo item depois de um tempo
 		if(colidiuItem && novoItem > 0) novoItem --;
 		else if(colidiuItem){
 			colidiuItem = false;
 			geraItem(player, tamanhoPlayer, obstaculos, numeroMaxObstaculos, item, ponto);
 		}
 
+		// Se gerou portais
+		if(portal){
+			//Verifica se entrou portal1
+			if(verificaColisao(portal1,&player[0])){
+				player[0].x = portal2->x;
+				player[0].y = portal2->y;
+				portal = false;
+			}else if(verificaColisao(portal2,&player[0])){
+				player[0].x = portal1->x;
+				player[0].y = portal1->y;
+				portal = false;
+
+			}
+
 		}
 
+}
 
-void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item, QUADRADO* ponto){
+
+void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO *item, QUADRADO* ponto, QUADRADO* portal1, QUADRADO* portal2){
 	if (!PAUSE){
 		//salvando posicao ultima posicao player
 		QUADRADO ultimo = player[tamanhoPlayer];
@@ -95,15 +113,31 @@ void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obst
 
 		//Verifica se pegou o item
 		if(verificaColisao(item, &player[0])){
-			funcaoItem(item, &player[0], obstaculos, numeroMaxObstaculos, ponto);
+			funcaoItem(item, &player[0], obstaculos, numeroMaxObstaculos, ponto, portal1, portal2);
 
 		}
 
-		//Gera novo item
+		//Gera novo item depois de um tempo
 		if(colidiuItem && novoItem > 0) novoItem --;
 		else if(colidiuItem){
 			colidiuItem = false;
 			geraItem(player, tamanhoPlayer, obstaculos, numeroMaxObstaculos, item, ponto);
+		}
+
+		// Se gerou portais
+		if(portal){
+			//Verifica se entrou portal1
+			if(verificaColisao(portal1,&player[0])){
+				player[0].x = portal2->x;
+				player[0].y = portal2->y;
+				portal = false;
+			}else if(verificaColisao(portal2,&player[0])){
+				player[0].x = portal1->x;
+				player[0].y = portal1->y;
+				portal = false;
+
+			}
+
 		}
 
 
@@ -115,7 +149,7 @@ void movimentarObjeto(int direcao, bool PAUSE, QUADRADO player[], QUADRADO *obst
 void morre(QUADRADO* player, bool PAUSE){
 	if(escudo){
 		escudo = false;
-		duracaoEscudo = 7;
+		duracaoEscudo = 8;
 
 	}else if(duracaoEscudo > 0){
 		duracaoEscudo--;
@@ -125,7 +159,7 @@ void morre(QUADRADO* player, bool PAUSE){
 
 	}else{
 		tamanhoPlayer--;
-		duracaoEscudo = 7;
+		duracaoEscudo = 8;
 	}
 
 }

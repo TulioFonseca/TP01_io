@@ -13,6 +13,6 @@ void geraItem(QUADRADO* player, int tamanhoPlayer, QUADRADO obstaculos[], int nu
 
 void geraPonto(QUADRADO* player, int tamanhoPlayer, QUADRADO obstaculos[], int numeroMaxObstaculos, QUADRADO* item, QUADRADO* ponto);
 
-void funcaoItem(QUADRADO* item, QUADRADO* player, QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO* ponto);
+void funcaoItem(QUADRADO* item, QUADRADO* player, QUADRADO *obstaculos, int numeroMaxObstaculos, QUADRADO* ponto, QUADRADO* portal1, QUADRADO* portal2);
 
 #endif /* ITEM_H_ */

@@ -13,6 +13,10 @@ QUADRADO player[1000000]; //tamanho total para ocupar toda a tela
 QUADRADO* itemPonto;
 QUADRADO* item;
 QUADRADO obstaculos[10];
+QUADRADO* portal1;
+QUADRADO* portal2;
+bool portal;
+
 
 //---------------------MOUSE----------
 //bool movimentaMouse = false;
@@ -50,12 +54,19 @@ void desenhaCena(void)
 	sprintf(vida, "%d", life);
 	strcat(vidas, vida);
 
+	int on = 0;
+	strcpy(shields, "Escudo: ");
+	if(escudo) on = 1;
+	sprintf(shield, "%d", on);
+	strcat(shields, shield);
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glColor3f(0.65, 0.9, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 	DesenhaPontuacao(pontos,2,95);
 	DesenhaPontuacao(vidas,40,95);
+	DesenhaPontuacao(shields,60,95);
 	glColor3f(1, 0, 0);
 	glLineWidth(2.0f);
 	glBegin(GL_LINE_LOOP); // Desenhando o contorno do labirinto;
@@ -85,29 +96,27 @@ void desenhaCena(void)
     desenhaQuadrado(*itemPonto);
 
     //Desenha Item
-    switch(item->tipoItem){
-		case 0: // normal
-			glColor3f(1, 0.2, 0);
+	switch(item->tipoItem){
+		case 0: // escudo
+			glColor3f(1, 1, 0);
 			break;
-		case 1: // ivulneravel
-
+		case 1: // TP
+			glColor3f(1, 0, 0);
 			break;
-		case 3: //
-
-			break;
-		case 4: //
-
-			break;
-		case 5: //
-			glColor3f(1, 0.2, 0);
-			break;
-		case 6: //
-			glColor3f(1, 0.98, 0);
+		case 2: // Portal
+			glColor3f(1, 0, 1);
 			break;
 		default:
 			break;
 	}
-    desenhaQuadrado(*item);
+	desenhaQuadrado(*item);
+
+	// Desenha portais se estiverem ativados
+	if(portal){
+		glColor3f(1, 0, 1);
+		desenhaQuadrado(*portal1);
+		desenhaQuadrado(*portal2);
+	}
 	glutSwapBuffers();
 
 }
@@ -120,6 +129,9 @@ void inicializa(void)
 
     //Cria Obstaculos
     criaObstaculos(&player[0], obstaculos, NUMERO_MAX_OBSTACULOS);
+
+    portal1 = malloc(sizeof(QUADRADO));
+    portal2 = malloc(sizeof(QUADRADO));
 
     item = malloc(sizeof(QUADRADO));
     itemPonto = malloc(sizeof(QUADRADO));
@@ -146,9 +158,9 @@ void redimensiona(int w, int h)
 
 void atualiza() {
 	if(!menuAtivado && mouse){
-		movimentaMouse(player,pontoMouseX,pontoMouseY,obstaculos, NUMERO_MAX_OBSTACULOS, item, PAUSE, itemPonto);
+		movimentaMouse(player,pontoMouseX,pontoMouseY,obstaculos, NUMERO_MAX_OBSTACULOS, item, PAUSE, itemPonto, portal1, portal2);
 	}else if(!menuAtivado){
-		movimentarObjeto(direcao, PAUSE, player, obstaculos, NUMERO_MAX_OBSTACULOS, item,itemPonto);
+		movimentarObjeto(direcao, PAUSE, player, obstaculos, NUMERO_MAX_OBSTACULOS, item,itemPonto, portal1, portal2);
 	}
 	glutTimerFunc(velocidade, atualiza, 0);
 	glutPostRedisplay();

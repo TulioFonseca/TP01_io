@@ -16,6 +16,9 @@ char ponto[1000];
 char vidas[1000];
 char vida[1000];
 
+char shields[10];
+char shield[10];
+
 bool escudo;
 int duracaoEscudo;
 int novoItem;
